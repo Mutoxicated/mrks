@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "tokens.h": "c",
+        "stdlib.h": "c",
+        "lexer.h": "c"
+    },
+    "makefile.configureOnOpen": false
+}
