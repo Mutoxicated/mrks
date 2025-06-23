@@ -44,14 +44,7 @@
                 ]
             },
             "linux": {
-                "options": {
-                    "cwd": "${workspaceFolder}/build"
-                },
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "'make run'"
-                ]
+                "command": "./build/c.lex",
             },
             "osx": {
                 "command": "bash",

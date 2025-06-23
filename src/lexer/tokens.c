@@ -1,11 +1,12 @@
 #include "tokens.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Token* NewToken(TokenType type, char* lexeme) {
     Token* token = malloc(sizeof(Token));
     token->type = type;
-    //(*token).lexeme = strcopy(lexeme);
+    strcpy(token->lexeme, lexeme);
     return token;
 }
 

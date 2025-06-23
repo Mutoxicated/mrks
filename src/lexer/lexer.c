@@ -11,11 +11,9 @@ Tokens* tokenize(const char* fileName) {
         printf("Not able to open the file.\n");
         return tokens;
     }
-    printf("Opened file.");
+    printf("Opened file.\n");
 
     char o = fgetc(file);
-
-    AddToken(tokens, *NewToken(Eof, ""));
 
     printf("%s", tokens->array[0].lexeme);
     
