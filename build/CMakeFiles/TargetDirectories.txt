@@ -1,0 +1,3 @@
+/home/mutoxicated/Desktop/Software/c.lex/build/CMakeFiles/c.lex.dir
+/home/mutoxicated/Desktop/Software/c.lex/build/CMakeFiles/edit_cache.dir
+/home/mutoxicated/Desktop/Software/c.lex/build/CMakeFiles/rebuild_cache.dir

@@ -4,5 +4,6 @@
         "stdlib.h": "c",
         "lexer.h": "c"
     },
-    "makefile.configureOnOpen": false
+    "makefile.configureOnOpen": false,
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }

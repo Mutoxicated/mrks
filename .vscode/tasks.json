@@ -16,6 +16,9 @@
                 ]
             },
             "linux": {
+                "options": {
+                    "cwd": "${workspaceFolder}/build"
+                },
                 "command": "bash",
                 "args": [
                     "-c",
@@ -41,6 +44,9 @@
                 ]
             },
             "linux": {
+                "options": {
+                    "cwd": "${workspaceFolder}/build"
+                },
                 "command": "bash",
                 "args": [
                     "-c",
@@ -66,6 +72,9 @@
                 ]
             },
             "linux": {
+                "options": {
+                    "cwd": "${workspaceFolder}/build"
+                },
                 "command": "bash",
                 "args": [
                     "-c",

@@ -1,5 +1,6 @@
 #include "tokens.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 Token* NewToken(TokenType type, char* lexeme) {
     Token* token = malloc(sizeof(Token));
@@ -10,7 +11,7 @@ Token* NewToken(TokenType type, char* lexeme) {
 
 Tokens* NewTokens() {
     Tokens* tokens = malloc(sizeof(Tokens));
-    Token* innerArray;
+    Token* innerArray = malloc(sizeof(Token));
     tokens->array = innerArray;
     tokens->length = 0;
 

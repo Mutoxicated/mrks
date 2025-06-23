@@ -10,10 +10,11 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
+            "program": "${workspaceRoot}/build/c.lex",
             "linux": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "gdb",
-                "program": "${workspaceFolder}/output/main"
+                "program": "${workspaceFolder}/build/c.lex"
             },
             "osx": {
                 "MIMode": "lldb",

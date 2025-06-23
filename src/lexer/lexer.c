@@ -1,14 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "lexer.h"
-#include "tokens.c"
+#include "tokens.h"
 
-Token* tokenize(const char* fileName) {
+Tokens* tokenize(const char* fileName) {
     Tokens* tokens = NewTokens();
 
     FILE* file = fopen(fileName, "r");
     if(file == NULL) {
-        printf("Not able to open the file.");
+        printf("Not able to open the file.\n");
         return tokens;
     }
     printf("Opened file.");
