@@ -2,7 +2,8 @@
     "files.associations": {
         "tokens.h": "c",
         "stdlib.h": "c",
-        "lexer.h": "c"
+        "lexer.h": "c",
+        "stdio.h": "c"
     },
     "makefile.configureOnOpen": false,
     "C_Cpp.default.compilerPath": "/usr/bin/gcc"

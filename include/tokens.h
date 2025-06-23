@@ -25,6 +25,6 @@ Tokens* NewTokens();
 void AddToken(Tokens* tokens, Token token);
 void FreeTokens(Tokens* tokens);
 
-Token* NewToken(TokenType type, char* lexeme);
+Token NewToken(TokenType type, char* lexeme);
 
 #endif

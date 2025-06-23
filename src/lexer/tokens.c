@@ -3,16 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-Token* NewToken(TokenType type, char* lexeme) {
-    Token* token = malloc(sizeof(Token));
-    token->type = type;
-    strcpy(token->lexeme, lexeme);
+Token NewToken(TokenType type, char* lexeme) {
+    Token token;
+    token.type = type;
+    strcpy(token.lexeme, lexeme);
     return token;
 }
 
 Tokens* NewTokens() {
     Tokens* tokens = malloc(sizeof(Tokens));
-    Token* innerArray = malloc(sizeof(Token));
+    Token* innerArray = NULL;
     tokens->array = innerArray;
     tokens->length = 0;
 
@@ -31,8 +31,10 @@ void AddToken(Tokens* tokens, Token token) {
 }
 
 void FreeTokens(Tokens* tokens) {
-    free(tokens->array);
-    tokens->array = NULL;
+    if (tokens->array != NULL) {
+        free(tokens->array);
+        tokens->array = NULL;
+    }
     tokens->length = 0;
     tokens = NULL;
 }
