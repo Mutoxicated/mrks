@@ -6,8 +6,15 @@
         "stdio.h": "c",
         "helpers.h": "c",
         "string.h": "c",
-        "ctype.h": "c"
+        "ctype.h": "c",
+        "macros.h": "c",
+        "nodes.h": "c",
+        "stdbool.h": "c",
+        "unistd.h": "c",
+        "compiler.h": "c",
+        "parser.h": "c"
     },
     "makefile.configureOnOpen": false,
-    "C_Cpp.default.compilerPath": "/usr/bin/gcc"
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+    "C_Cpp.errorSquiggles": "enabled",
 }

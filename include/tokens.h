@@ -26,43 +26,43 @@
         TOKEN(Asterisk) \
         TOKEN(Caret) \
         \
+        TOKEN(Eof) \
         TOKEN(Invalid) \
-
-#define GENERATE_ENUM(ENUM) ENUM,
-#define GENERATE_STRING(STRING) #STRING,
 
 #ifndef TOKENS
 #define TOKENS
 
+#include "macros.h"
 #include "helpers.h"
+#include <stdlib.h>
 
 typedef enum {
     KEYWORDS(GENERATE_ENUM)
 } TokenType;
 
-static char* TokenStrings[] = {
+static const char* TokenStrings[] = {
     KEYWORDS(GENERATE_STRING)
 };
 
 static const int TokensLen = sizeof(TokenStrings)/sizeof(TokenStrings[0]);
 
 typedef struct {
-    TokenType type;
-    char* lexeme;
     Range columnRange;
     int line;
-} Token;
+} TokenLocation;
+TokenLocation NewTokenLocation(Range columnRange, int line);
+
+ARRAY_DEF(TokenLocation, TokenLocations)
 
 typedef struct {
-    Token* array;
-    int length;
-} Tokens;
+    TokenType type;
+    char* lexeme;
+    TokenLocation location;
+} Token;
 
-Tokens* NewTokens();
-void AddToken(Tokens* tokens, Token token);
-void FreeTokens(Tokens* tokens);
+ARRAY_DEF(Token, Tokens)
+
 Token NewToken(TokenType type, char* lexeme, int columnEnd, int line);
-
 TokenType IdentIsKeyword(char* ident);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "tokens.h"
 
-Tokens* tokenize(const char* fileName);
+const char* Tokenize(const char* fileName, Tokens* token);
 
 #endif

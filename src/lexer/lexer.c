@@ -7,13 +7,10 @@
 #include "tokens.h"
 #include "helpers.h"
 
-Tokens* tokenize(const char* fileName) {
-    Tokens* tokens = NewTokens();
-
+const char* Tokenize(const char* fileName, Tokens* tokens) {
     FILE* file = fopen(fileName, "r");
     if(file == NULL) {
-        printf("Not able to open the file.\n");
-        return tokens;
+        return "Not able to open the file.";
     }
     printf("Opened file.\n");
     
@@ -24,7 +21,7 @@ Tokens* tokenize(const char* fileName) {
     bool isString = false;
 
     char o;
-    while (EOF == EOF) {
+    while (true) {
         o = fgetc(file);
         columnEnd++;
 
@@ -42,12 +39,12 @@ Tokens* tokenize(const char* fileName) {
                 ResetStrBuf(identBuf);
                 continue;
             }
-            AddChar(identBuf, o);
+            Write(identBuf, o);
             continue;
         }
         
         if (isalpha(o)) {
-            AddChar(identBuf, o);
+            Write(identBuf, o);
             continue;
         }
         if (strcmp(identBuf->array, "") != 0) {
@@ -60,7 +57,7 @@ Tokens* tokenize(const char* fileName) {
             ResetStrBuf(identBuf);
         }
         if (isdigit(o)) {
-            AddChar(numBuf, o);
+            Write(numBuf, o);
             continue;
         }
         if (strcmp(numBuf->array, "") != 0) {
@@ -116,10 +113,11 @@ Tokens* tokenize(const char* fileName) {
                 break;
         }
     }
+    AddToken(tokens, NewToken(Eof, "", columnEnd, line));
 
     fclose(file);
     FreeStrBuf(identBuf);
     FreeStrBuf(numBuf);
-    return tokens;
+    return NULL;
 }
 
