@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 Token NewToken(TokenType type, char* lexeme, int columnEnd, int line) {
     int len = strlen(lexeme);

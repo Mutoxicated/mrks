@@ -1,11 +1,6 @@
 #ifndef HELPERS
 #define HELPERS
 
-typedef enum{
-    false = 0,
-    true= 1
-} bool;
-
 typedef struct{
     char* array;
     int length;
