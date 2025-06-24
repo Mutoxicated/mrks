@@ -1,7 +1,12 @@
 #ifndef HELPERS
 #define HELPERS
 
-typedef  struct{
+typedef enum{
+    false = 0,
+    true= 1
+} bool;
+
+typedef struct{
     char* array;
     int length;
 } StrBuf;
@@ -11,5 +16,12 @@ void AddChar(StrBuf* buf, char c);
 void ResetStrBuf(StrBuf* buf);
 char* String(StrBuf* buf);
 void FreeStrBuf(StrBuf* buf);
+
+typedef struct{
+    int min;
+    int max;
+} Range;
+
+Range NewRange(int min, int max);
 
 #endif

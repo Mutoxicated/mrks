@@ -1,6 +1,13 @@
 #include <stdlib.h>
 #include "helpers.h"
 
+Range NewRange(int min, int max) {
+    Range range;
+    range.min = min;
+    range.max = max;
+    return range;
+}
+
 StrBuf* NewStrBuf() {
     StrBuf* buf = malloc(sizeof(StrBuf));
     buf->array = malloc(sizeof(char));
