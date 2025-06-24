@@ -6,6 +6,7 @@
 Token NewToken(TokenType type, char* lexeme) {
     Token token;
     token.type = type;
+    token.lexeme = malloc(sizeof(char)*strlen(lexeme));
     strcpy(token.lexeme, lexeme);
     return token;
 }

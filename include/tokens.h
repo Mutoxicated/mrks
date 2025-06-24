@@ -4,16 +4,19 @@
 typedef enum TokenType {
     Identifier,
     Number,
+
+    Equal,
     Dot,
     Comma,
     OpenParen,
     CloseParen,
+
     Eof
 } TokenType;
 
 typedef struct Token {
     TokenType type;
-    char lexeme[20];
+    char* lexeme;
 } Token;
 
 typedef struct Tokens {
