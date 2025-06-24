@@ -20,20 +20,21 @@ Tokens* tokenize(const char* fileName) {
 
     char o = fgetc(file);
 
-    while (o != EOF) {
+    while (EOF == EOF) {
         if (isalpha(o)) {
-        }else if (strcmp(identBuf, "") == 0) {
-            AddToken(tokens, NewToken(Identifier, identBuf));
-            identBuf = NewStrBuf();
+            AddChar(identBuf, o);
+        }else if (strcmp(identBuf->array, "") != 0) {
+            AddToken(tokens, NewToken(Identifier, identBuf->array));
+            ResetStrBuf(identBuf);
+        }
+        if (o == EOF) {
+            break;
         }
         o = fgetc(file);
     }
 
-    printf("%s", tokens->array[0].lexeme);
-    
     fclose(file);
-
-    free(identBuf);
+    FreeStrBuf(identBuf);
     return tokens;
 }
 
