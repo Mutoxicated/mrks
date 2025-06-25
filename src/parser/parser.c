@@ -1,6 +1,7 @@
 #include "nodes.h"
 #include "parser.h"
 #include <stdbool.h>
+#include "dbg_options.h"
 
 typedef struct{
     Tokens* tokens;

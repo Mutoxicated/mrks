@@ -6,14 +6,10 @@
 #include "lexer.h"
 #include "tokens.h"
 #include "helpers.h"
+#include "color.h"
+#include "dbg_options.h"
 
-const char* Tokenize(const char* fileName, Tokens* tokens) {
-    FILE* file = fopen(fileName, "r");
-    if(file == NULL) {
-        return "Not able to open the file.";
-    }
-    printf("Opened file.\n");
-    
+const char* Tokenize(FILE* file, Tokens* tokens) {    
     int line = 1;
     int columnEnd = 0;
     StrBuf* identBuf = strbuf_new();

@@ -37,21 +37,20 @@ char* node_location_to_str(NodeLocation* nl);
 
 typedef struct{
     Token token;
-    TokenLocations* locations;
+    TokenLocations locations;
 } NodeCore;
 
 NodeCore nodecore_new(Tokens* tokens);
 NodeCore nodecore_simple_new(Token token);
 
 /// @brief Gives the full location of the `core`, however many lines that spans
-NodeLocation nodecore_get_full_location(NodeCore core);
+NodeLocation nodecore_get_full_location(NodeCore* core);
 /// @brief Gives only the first line location of the `core`
-NodeLocation nodecore_get_line_location(NodeCore core);
+NodeLocation nodecore_get_line_location(NodeCore* core);
 
 typedef struct{
     NodeCore core;
 } NodeIdentifier;
-ARRAY_DEF(NodeIdentifier, NodeIdentifiers, node_identifiers)
 
 typedef struct{
     NodeCore core;
@@ -67,7 +66,6 @@ typedef struct{
     ExprType type;
     ExprInner inner;
 } Expr;
-ARRAY_DEF(Expr, Exprs, exprs)
 
 typedef struct{
     NodeCore core;
@@ -83,7 +81,6 @@ typedef struct{
     StmtType type;
     StmtInner inner;
 } Stmt;
-ARRAY_DEF(Stmt, Stmts, stmts)
 
 char* expr_to_string(Expr expr);
 char* stmt_to_string(Stmt stmt);

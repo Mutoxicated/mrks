@@ -4,9 +4,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "tokens.h"
-
-ARRAY_IMPL(Token, Tokens, tokens)
-ARRAY_IMPL(TokenLocation, TokenLocations, token_locations)
+#include "dbg_options.h"
 
 TokenLocation token_location_new(Range columnRange, int line) {
     TokenLocation tl;

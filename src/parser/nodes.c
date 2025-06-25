@@ -4,10 +4,7 @@
 #include "nodes.h"
 #include "helpers.h"
 #include "macros.h"
-
-ARRAY_IMPL(Expr, Exprs, exprs)
-ARRAY_IMPL(Stmt, Stmts, stmts)
-ARRAY_IMPL(NodeIdentifier, NodeIdentifiers, node_identifiers)
+#include "dbg_options.h"
 
 char* node_location_to_str(NodeLocation* nl) {
     StrBuf* buf = strbuf_new();
@@ -18,16 +15,16 @@ char* node_location_to_str(NodeLocation* nl) {
     return str;
 }
 
-NodeLocation nodecore_get_line_location(NodeCore nc) {
+NodeLocation nodecore_get_line_location(NodeCore* nc) {
     NodeLocation nl;
-    nl.columnRange = nc.locations->array[0].columnRange;
-    nl.lineRange = range_new(nc.locations->array[0].line, nc.locations->array[0].line);
+    nl.columnRange = nc->locations.array[0].columnRange;
+    nl.lineRange = range_new(nc->locations.array[0].line, nc->locations.array[0].line);
 
-    for (int i = 1; i < nc.locations->length; i++) {
-        if (nc.locations->array[0].line != nl.lineRange.min) {
+    for (int i = 1; i < nc->locations.length; i++) {
+        if (nc->locations.array[0].line != nl.lineRange.min) {
             break;
         }
-        Range colRange = nc.locations->array[i].columnRange;
+        Range colRange = nc->locations.array[i].columnRange;
         if (nl.columnRange.max < colRange.max) {
             nl.columnRange.max = colRange.max;
         }
@@ -45,8 +42,8 @@ char* stmt_to_string(Stmt stmt) {
     switch (stmt.type) {
         case VariableDeclaration:
             VariableDecl vd = stmt.inner.vd;
-            NodeLocation nl = nodecore_get_line_location(vd.core);
-            strbuf_write_string(buf, stmtStrings[(int)stmt.type], " at ", node_location_to_str(&nl), NULL);
+            NodeLocation nl = nodecore_get_line_location(&vd.core);
+            strbuf_write_string(buf, stmtStrings[(int)stmt.type], " at ", node_location_to_str(&nl), ":", NULL);
             break;
     }
     char* res = strbuf_get_str(buf);
@@ -57,9 +54,10 @@ char* stmt_to_string(Stmt stmt) {
 NodeCore nodecore_new(Tokens* tokens) {
     NodeCore nc;
     nc.token = tokens->array[0];
-    nc.locations = token_locations_new();
+    nc.locations.array = NULL;
+    nc.locations.length = 0;
     for (int i = 0; i < tokens->length; i++) {
-        token_locations_add(nc.locations, tokens->array[i].location);
+        token_locations_add(&nc.locations, tokens->array[i].location);
     }
 
     return nc;
@@ -67,8 +65,9 @@ NodeCore nodecore_new(Tokens* tokens) {
 NodeCore nodecore_simple_new(Token token) {
     NodeCore nc;
     nc.token = token;
-    nc.locations = token_locations_new();
-    token_locations_add(nc.locations, token.location);
+    nc.locations.array = NULL;
+    nc.locations.length = 0;
+    token_locations_add(&nc.locations, token.location);
 
     return nc;
 }

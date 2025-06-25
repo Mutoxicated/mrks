@@ -3,6 +3,16 @@
 
 #include "macros.h"
 
+typedef struct { 
+    int length; 
+    struct{}* array; 
+} Array; 
+
+Array array_new(); 
+void array_add(Array* arr, struct{} obj); 
+struct{}* array_get(Array* arr, int index);
+void array_free(Array* arr);
+
 typedef struct{
     char* array;
     int length;
@@ -21,14 +31,11 @@ typedef struct{
 } Range;
 Range range_new(int min, int max);
 
-ARRAY_DEF(Range, Ranges, ranges)
-ARRAY_DEF(int, ints, ints)
-
 typedef struct{
     char* str;
     int length;
-    ints* strStarts;
     int strLen;
+    Array strStarts;
 } Strings;
 Strings* strings_new(char* str);
 void strings_add(Strings* strings, char* str);

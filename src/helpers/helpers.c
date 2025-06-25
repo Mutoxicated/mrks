@@ -4,6 +4,39 @@
 #include <stdarg.h>
 #include "macros.h"
 #include "helpers.h"
+#include "dbg_options.h"
+
+Array array_new() { 
+    Array arr; 
+    arr.array = NULL; 
+    arr.length = 0; 
+    return arr; 
+} 
+
+struct{}* array_get(Array* arr, int index) {
+    return &arr->array[index];
+}
+
+void array_add(Array* arr, struct{} obj) { 
+    arr->length++; 
+    if (arr->array == NULL) { 
+        arr->array = malloc(sizeof (obj)); 
+        arr->array[0] = obj; 
+        return; 
+    } 
+    arr->array = realloc(arr->array, sizeof(TYPE)*arr->length); 
+    arr->array[arr->length-1] = obj; 
+} 
+
+void array_free(Array* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
+    free(arr);
+    arr = NULL;
+}
 
 Range range_new(int min, int max) {
     Range range;
@@ -78,17 +111,15 @@ char* strbuf_get_str(StrBuf* buf) {
     return str;
 }
 
-ARRAY_IMPL(Range, Ranges, ranges)
-ARRAY_IMPL(int, ints, ints)
-
 Strings* strings_new(char* str) {
     Strings* strings = malloc(sizeof(Strings));
     int len = strlen(str);
     strings->str = malloc(sizeof(char)*len);
     strcpy(strings->str, str);
     strings->length = 1;
-    strings->strStarts = ints_new();
-    ints_add(strings->strStarts, 0);
+    strings->strStarts.array = NULL;
+    strings->strStarts.length = 0;
+    ints_add(&strings->strStarts, 0);
     strings->strLen = strlen(str);
 
     return strings;
@@ -114,7 +145,7 @@ void strings_add(Strings* strings, char* str) {
         if (strings->str[i] == '\0') {
             currentStrIndex++;
             if (currentStrIndex == strings->length) {
-                ints_add(strings->strStarts, i+1);
+                ints_add(&strings->strStarts, i+1);
             }
         }
     }
@@ -125,7 +156,7 @@ void strings_add(Strings* strings, char* str) {
 char* strings_get_by_index(Strings* strings, int index) {
     StrBuf* buf = strbuf_new();
 
-    int i = strings->strStarts->array[index];
+    int i = strings->strStarts.array[index];
     while (true) {
         if (strings->str[i] == '\0') {
             break;
@@ -143,7 +174,7 @@ char* strings_get_by_index(Strings* strings, int index) {
 
 void strings_free(Strings* strings) {
     free(strings->str);
-    ints_free(strings->strStarts);
+    ints_free(&strings->strStarts);
     free(strings);
     strings = NULL;
 }

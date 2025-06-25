@@ -52,15 +52,11 @@ typedef struct {
 } TokenLocation;
 TokenLocation token_location_new(Range columnRange, int line);
 
-ARRAY_DEF(TokenLocation, TokenLocations, token_locations)
-
 typedef struct {
     TokenType type;
     char* lexeme;
     TokenLocation location;
 } Token;
-
-ARRAY_DEF(Token, Tokens, tokens)
 
 Token token_new(TokenType type, char* lexeme, int columnEnd, int line);
 TokenType is_ident_keyword(char* ident);

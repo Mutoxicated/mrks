@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "tokens.h": "c",
+        "stddef.h": "c",
         "stdlib.h": "c",
         "lexer.h": "c",
         "stdio.h": "c",
@@ -12,9 +13,15 @@
         "stdbool.h": "c",
         "unistd.h": "c",
         "compiler.h": "c",
-        "parser.h": "c"
+        "parser.h": "c",
+        "concepts": "c",
+        "color.h": "c",
+        "dbg.h": "c",
+        "dbg_options.h": "c",
+        "dbg_internal.h": "c",
+        "cstdlib": "c",
+        "stdarg.h": "c"
     },
-    "makefile.configureOnOpen": false,
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
-    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.errorSquiggles": "disabled",
 }
