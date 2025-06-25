@@ -4,13 +4,15 @@
 #include "nodes.h"
 #include "helpers.h"
 #include "macros.h"
+#include "dbg_options.h"
 
 ARRAY_IMPL(Expr, Exprs, exprs)
 ARRAY_IMPL(Stmt, Stmts, stmts)
 ARRAY_IMPL(NodeIdentifier, NodeIdentifiers, node_identifiers)
 
 char* node_location_to_str(NodeLocation* nl) {
-    StrBuf* buf = strbuf_new();
+    StrBuf _buf = strbuf_new();
+    StrBuf* buf = &_buf;
     strbuf_write_string(buf, itoa(nl->columnRange.min, 10), ":", itoa(nl->lineRange.min, 10), NULL);
 
     char* str = strbuf_get_str(buf);
@@ -41,7 +43,8 @@ char* expr_to_string(Expr expr) {
 }
 
 char* stmt_to_string(Stmt stmt) {
-    StrBuf* buf = strbuf_new();
+    StrBuf _buf = strbuf_new();
+    StrBuf* buf = &_buf;
     switch (stmt.type) {
         case VariableDeclaration:
             VariableDecl vd = stmt.inner.vd;

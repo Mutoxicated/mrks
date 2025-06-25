@@ -1,0 +1,67 @@
+[[macros]]
+name = "ARRAY_DEF"
+params = ["TYPE", "NAME", "LNAME"]
+source = """
+typedef struct { 
+    TYPE* array; 
+    int length; 
+} NAME; 
+NAME* LNAME##_new(); 
+void LNAME##_add(NAME* arr, TYPE token);
+void LNAME##_free(NAME* arr);
+"""
+
+[[macros]]
+name = "ARRAY_DEF"
+params = ["TYPE", "NAME", "LNAME"]
+source = """
+$NAME* $LNAME##_new() { 
+    $NAME* arr = malloc(sizeof($NAME)); 
+    $TYPE* innerArray = NULL; 
+    arr->array = innerArray; 
+    arr->length = 0; 
+
+    return arr; 
+} 
+
+void $LNAME##_add($NAME* arr, $TYPE token) { 
+    arr->length++; 
+    if (arr->array == NULL) { 
+        arr->array = malloc(sizeof($TYPE)); 
+        arr->array[0] = token;
+ 
+        return; 
+    } 
+    arr->array = realloc(arr->array, sizeof($TYPE)*arr->length); 
+    arr->array[arr->length-1] = token; 
+} 
+
+void $LNAME##_free($NAME* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
+    arr = NULL;
+}
+"""
+
+[[invocations]] 
+name = "ARRAY_DEF"
+args = ["Token", "Tokens", "tokens"]
+destination = "lexer/tokens.h"
+flag = 1
+
+[[invocations]]
+name = "ARRAY_IMPL"
+args = ["Token", "Tokens", "tokens"]
+destination = "lexer/tokens.c"
+flag = 1
+
+#define loop(PARAM1) for (int i = 0; i < PARAM1; i++)
+
+
+main.c
+
+for (int i = 0; i < 5; i++) {
+}

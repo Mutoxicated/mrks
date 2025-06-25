@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include "macros.h"
 #include "helpers.h"
+#include "dbg_options.h"
 
 Range range_new(int min, int max) {
     Range range;
@@ -12,11 +13,11 @@ Range range_new(int min, int max) {
     return range;
 }
 
-StrBuf* strbuf_new() {
-    StrBuf* buf = malloc(sizeof(StrBuf));
-    buf->array = malloc(sizeof(char));
-    buf->array[0] = '\0';
-    buf->length = 0;
+StrBuf strbuf_new() {
+    StrBuf buf;
+    buf.array = malloc(sizeof(char));
+    buf.array[0] = '\0';
+    buf.length = 0;
     return buf;
 }
 
@@ -69,7 +70,6 @@ void strbuf_free(StrBuf* buf) {
     free(buf->array);
     buf->array = NULL;
     buf->length = 0;
-    free(buf);
 }
 
 char* strbuf_get_str(StrBuf* buf) {
@@ -123,21 +123,22 @@ void strings_add(Strings* strings, char* str) {
 }
 
 char* strings_get_by_index(Strings* strings, int index) {
-    StrBuf* buf = strbuf_new();
+    StrBuf buf = strbuf_new();
+    StrBuf* bufptr = &buf;
 
     int i = strings->strStarts->array[index];
     while (true) {
         if (strings->str[i] == '\0') {
             break;
         }
-        strbuf_write(buf, strings->str[i]);
+        strbuf_write(bufptr, strings->str[i]);
         i++;
     }
 
-    char* string = malloc(sizeof(*(buf->array)));
-    strcpy(string, buf->array);
+    char* string = malloc(sizeof(*(buf.array)));
+    strcpy(string, buf.array);
 
-    strbuf_free(buf);
+    strbuf_free(bufptr);
     return string;
 }
 
@@ -161,12 +162,13 @@ void reverse(char str[], int length) {
 }
 
 char* itoa(int num, int base) {
-    StrBuf* buf = strbuf_new();
+    StrBuf buf = strbuf_new();
+    StrBuf* bufptr = &buf;
 
     bool isNegative = false;
 
     if (num == 0) {
-        strbuf_write(buf, '0');
+        strbuf_write(bufptr, '0');
         goto exit;
     }
 
@@ -180,17 +182,17 @@ char* itoa(int num, int base) {
 
     while (num != 0) {
         int rem = num % base;
-        strbuf_write(buf, rem > 9 ? (rem - 10) + 'a' : rem + '0');
+        strbuf_write(bufptr, rem > 9 ? (rem - 10) + 'a' : rem + '0');
         num = num / base;
     }
 
     if (isNegative)
-        strbuf_write(buf, '-');
+        strbuf_write(bufptr, '-');
 
     exit:
-    char* str = strbuf_get_str(buf);
-    reverse(str, buf->length);
+    char* str = strbuf_get_str(bufptr);
+    reverse(str, buf.length);
 
-    strbuf_free(buf);
+    strbuf_free(bufptr);
     return str;
 }

@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "tokens.h"
+#include "dbg_options.h"
 
 ARRAY_IMPL(Token, Tokens, tokens)
 ARRAY_IMPL(TokenLocation, TokenLocations, token_locations)

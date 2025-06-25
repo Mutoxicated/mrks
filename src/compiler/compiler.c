@@ -7,6 +7,7 @@
 #include "lexer.h"
 #include "nodes.h"
 #include "parser.h"
+#include "dbg_options.h"
 
 int compiler_action(Strings* filesToBuild) {
     char cwd[_PC_PATH_MAX];

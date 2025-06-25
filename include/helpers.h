@@ -8,7 +8,7 @@ typedef struct{
     int length;
 } StrBuf;
 
-StrBuf* strbuf_new();
+StrBuf strbuf_new();
 void strbuf_write(StrBuf* buf, char c);
 void strbuf_write_string(StrBuf* buf, ...);
 void strbuf_reset(StrBuf* buf);

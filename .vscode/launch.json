@@ -10,11 +10,11 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "program": "${workspaceRoot}/build/c.lex",
+            "program": "${workspaceRoot}/build/mrks",
             "linux": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "gdb",
-                "program": "${workspaceFolder}/build/c.lex"
+                "program": "${workspaceFolder}/build/mrks"
             },
             "osx": {
                 "MIMode": "lldb",

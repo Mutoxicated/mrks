@@ -6,6 +6,7 @@
 #include "lexer.h"
 #include "tokens.h"
 #include "helpers.h"
+#include "dbg_options.h"
 
 const char* Tokenize(const char* fileName, Tokens* tokens) {
     FILE* file = fopen(fileName, "r");
@@ -16,8 +17,10 @@ const char* Tokenize(const char* fileName, Tokens* tokens) {
     
     int line = 1;
     int columnEnd = 0;
-    StrBuf* identBuf = strbuf_new();
-    StrBuf* numBuf = strbuf_new();
+    StrBuf _ident_buf = strbuf_new();
+    StrBuf* ident_buf = &_ident_buf;
+    StrBuf _num_buf = strbuf_new();
+    StrBuf* num_buf = &_num_buf;
     bool isString = false;
 
     char o;
@@ -30,39 +33,39 @@ const char* Tokenize(const char* fileName, Tokens* tokens) {
                 line++;
                 columnEnd = 0;
                 isString = false;
-                strbuf_reset(identBuf);
+                strbuf_reset(ident_buf);
                 continue;
             }
             if (o == '\"') {
                 isString = false;
-                tokens_add(tokens, token_new(Str, identBuf->array, columnEnd-1, line));
-                strbuf_reset(identBuf);
+                tokens_add(tokens, token_new(Str, _ident_buf.array, columnEnd-1, line));
+                strbuf_reset(ident_buf);
                 continue;
             }
-            strbuf_write(identBuf, o);
+            strbuf_write(ident_buf, o);
             continue;
         }
         
         if (isalpha(o)) {
-            strbuf_write(identBuf, o);
+            strbuf_write(ident_buf, o);
             continue;
         }
-        if (strcmp(identBuf->array, "") != 0) {
-            Token token = token_new(Identifier, identBuf->array, columnEnd, line);
+        if (strcmp(_ident_buf.array, "") != 0) {
+            Token token = token_new(Identifier, _ident_buf.array, columnEnd, line);
             TokenType tt = is_ident_keyword(token.lexeme);
             if (tt != Invalid) {
                 token.type = tt;
             }
             tokens_add(tokens, token);
-            strbuf_reset(identBuf);
+            strbuf_reset(ident_buf);
         }
         if (isdigit(o)) {
-            strbuf_write(numBuf, o);
+            strbuf_write(num_buf, o);
             continue;
         }
-        if (strcmp(numBuf->array, "") != 0) {
-            tokens_add(tokens, token_new(Number, numBuf->array, columnEnd, line));
-            strbuf_reset(numBuf);
+        if (strcmp(_num_buf.array, "") != 0) {
+            tokens_add(tokens, token_new(Number, _num_buf.array, columnEnd, line));
+            strbuf_reset(num_buf);
         }
         if (o == EOF) {
             break;
@@ -116,8 +119,8 @@ const char* Tokenize(const char* fileName, Tokens* tokens) {
     tokens_add(tokens, token_new(Eof, "", columnEnd, line));
 
     fclose(file);
-    strbuf_free(identBuf);
-    strbuf_free(numBuf);
+    strbuf_free(ident_buf);
+    strbuf_free(num_buf);
     return NULL;
 }
 
