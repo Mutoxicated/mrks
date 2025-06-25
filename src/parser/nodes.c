@@ -5,25 +5,23 @@
 #include "helpers.h"
 #include "macros.h"
 
-ARRAY_IMPL(Expr, Exprs)
-ARRAY_IMPL(Stmt, Stmts)
-ARRAY_IMPL(NodeIdentifier, NodeIdentifiers)
+ARRAY_IMPL(Expr, Exprs, exprs)
+ARRAY_IMPL(Stmt, Stmts, stmts)
+ARRAY_IMPL(NodeIdentifier, NodeIdentifiers, node_identifiers)
 
+char* node_location_to_str(NodeLocation* nl) {
+    StrBuf* buf = strbuf_new();
+    strbuf_write_string(buf, itoa(nl->columnRange.min, 10), ":", itoa(nl->lineRange.min, 10), NULL);
 
-
-char* NodeLocToString(NodeLocation* nl) {
-    StrBuf* buf = NewStrBuf();
-    WriteString(buf, itoa(nl->columnRange.min, 10), ":", itoa(nl->lineRange.min, 10), NULL);
-
-    char* str = GetStrBufString(buf);
-    FreeStrBuf(buf);
+    char* str = strbuf_get_str(buf);
+    strbuf_free(buf);
     return str;
 }
 
-NodeLocation GetLineLocation(NodeCore nc) {
+NodeLocation nodecore_get_line_location(NodeCore nc) {
     NodeLocation nl;
     nl.columnRange = nc.locations->array[0].columnRange;
-    nl.lineRange = NewRange(nc.locations->array[0].line, nc.locations->array[0].line);
+    nl.lineRange = range_new(nc.locations->array[0].line, nc.locations->array[0].line);
 
     for (int i = 1; i < nc.locations->length; i++) {
         if (nc.locations->array[0].line != nl.lineRange.min) {
@@ -38,38 +36,39 @@ NodeLocation GetLineLocation(NodeCore nc) {
     return nl;
 }
 
-char* Expr2String(Expr expr) {
+char* expr_to_string(Expr expr) {
     return "";
 }
 
-char* Stmt2String(Stmt stmt) {
-    StrBuf* buf = NewStrBuf();
+char* stmt_to_string(Stmt stmt) {
+    StrBuf* buf = strbuf_new();
     switch (stmt.type) {
         case VariableDeclaration:
-            NodeLocation nl = GetLineLocation(stmt.vd.core);
-            WriteString(buf, stmtStrings[(int)stmt.type], " at ", NodeLocToString(&nl), NULL);
+            VariableDecl vd = stmt.inner.vd;
+            NodeLocation nl = nodecore_get_line_location(vd.core);
+            strbuf_write_string(buf, stmtStrings[(int)stmt.type], " at ", node_location_to_str(&nl), NULL);
             break;
     }
-    char* res = GetStrBufString(buf);
-    FreeStrBuf(buf);
+    char* res = strbuf_get_str(buf);
+    strbuf_free(buf);
     return res;
 }
 
-NodeCore NewNodeCore(Tokens* tokens) {
+NodeCore nodecore_new(Tokens* tokens) {
     NodeCore nc;
     nc.token = tokens->array[0];
-    nc.locations = NewTokenLocations();
+    nc.locations = token_locations_new();
     for (int i = 0; i < tokens->length; i++) {
-        AddTokenLocation(nc.locations, tokens->array[i].location);
+        token_locations_add(nc.locations, tokens->array[i].location);
     }
 
     return nc;
 }
-NodeCore NewSimpleNodeCore(Token token) {
+NodeCore nodecore_simple_new(Token token) {
     NodeCore nc;
     nc.token = token;
-    nc.locations = NewTokenLocations();
-    AddTokenLocation(nc.locations, token.location);
+    nc.locations = token_locations_new();
+    token_locations_add(nc.locations, token.location);
 
     return nc;
 }

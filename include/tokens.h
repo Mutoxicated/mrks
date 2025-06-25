@@ -40,19 +40,19 @@ typedef enum {
     KEYWORDS(GENERATE_ENUM)
 } TokenType;
 
-static const char* TokenStrings[] = {
+static const char* TOKENS_STRINGS[] = {
     KEYWORDS(GENERATE_STRING)
 };
 
-static const int TokensLen = sizeof(TokenStrings)/sizeof(TokenStrings[0]);
+static const int TOKENS_LENGTH = sizeof(TOKENS_STRINGS)/sizeof(TOKENS_STRINGS[0]);
 
 typedef struct {
     Range columnRange;
     int line;
 } TokenLocation;
-TokenLocation NewTokenLocation(Range columnRange, int line);
+TokenLocation token_location_new(Range columnRange, int line);
 
-ARRAY_DEF(TokenLocation, TokenLocations)
+ARRAY_DEF(TokenLocation, TokenLocations, token_locations)
 
 typedef struct {
     TokenType type;
@@ -60,9 +60,9 @@ typedef struct {
     TokenLocation location;
 } Token;
 
-ARRAY_DEF(Token, Tokens)
+ARRAY_DEF(Token, Tokens, tokens)
 
-Token NewToken(TokenType type, char* lexeme, int columnEnd, int line);
-TokenType IdentIsKeyword(char* ident);
+Token token_new(TokenType type, char* lexeme, int columnEnd, int line);
+TokenType is_ident_keyword(char* ident);
 
 #endif

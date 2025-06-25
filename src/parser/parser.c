@@ -20,7 +20,7 @@ Stmts* Parse(Tokens* tokens) {
     ts.index = 0;
     ts.cap = sizeof(*tokens)/sizeof(Token);
 
-    Stmts* stmts = NewStmts();
+    Stmts* stmts = stmts_new();
 
     Token t;
     while (true) {
@@ -31,12 +31,11 @@ Stmts* Parse(Tokens* tokens) {
     }
 
     VariableDecl vd;
-    vd.core = NewSimpleNodeCore(t);
+    vd.core = nodecore_simple_new(t);
     Stmt stmt;
-    stmt.vd = vd;
+    stmt.inner.vd = vd;
     stmt.type = VariableDeclaration;
-
-    AddStmt(stmts, stmt);
+    stmts_add(stmts, stmt);
 
     return stmts;
 }

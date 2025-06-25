@@ -6,8 +6,8 @@
 
 #include <stdlib.h>
 
-#define ARRAY_IMPL(TYPE, NAME) \
-NAME* New##NAME() { \
+#define ARRAY_IMPL(TYPE, NAME, LNAME) \
+NAME* LNAME##_new() { \
     NAME* arr = malloc(sizeof(NAME)); \
     TYPE* innerArray = NULL; \
     arr->array = innerArray; \
@@ -16,7 +16,7 @@ NAME* New##NAME() { \
     return arr; \
 } \
 \
-void Add##TYPE(NAME* arr, TYPE token) { \
+void LNAME##_add(NAME* arr, TYPE token) { \
     arr->length++; \
     if (arr->array == NULL) { \
         arr->array = malloc(sizeof(TYPE)); \
@@ -27,7 +27,7 @@ void Add##TYPE(NAME* arr, TYPE token) { \
     arr->array[arr->length-1] = token; \
 } \
 \
-void Free##NAME(NAME* arr) {\
+void LNAME##_free(NAME* arr) {\
     if (arr->array != NULL) {\
         free(arr->array);\
         arr->array = NULL;\
@@ -36,6 +36,6 @@ void Free##NAME(NAME* arr) {\
     arr = NULL;\
 }\
 
-#define ARRAY_DEF(TYPE, NAME) typedef struct { TYPE* array; int length; } NAME; NAME* New##NAME(); void Add##TYPE(NAME* arr, TYPE token); void Free##NAME(NAME* arr); \
+#define ARRAY_DEF(TYPE, NAME, LNAME) typedef struct { TYPE* array; int length; } NAME; NAME* LNAME##_new(); void LNAME##_add(NAME* arr, TYPE token); void LNAME##_free(NAME* arr); \
 
 #endif

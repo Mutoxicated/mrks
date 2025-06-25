@@ -8,16 +8,16 @@
 #include "nodes.h"
 #include "parser.h"
 
-int Compile(Strings* filesToBuild) {
+int compiler_action(Strings* filesToBuild) {
     char cwd[_PC_PATH_MAX];
     getcwd(cwd, sizeof(cwd));
 
     bool isAtEnd = false;
     for (int i = 0; i < filesToBuild->length; i++) {
-        char* file = GetString(filesToBuild, i);
+        char* file = strings_get_by_index(filesToBuild, i);
         printf("File: %s\n", file);
         
-        Tokens* tokens = NewTokens();
+        Tokens* tokens = tokens_new();
         const char* err = Tokenize(file, tokens);
         if (err != NULL) {
             printf("Compilation error: %s\n", err);
@@ -26,16 +26,16 @@ int Compile(Strings* filesToBuild) {
         for (int i = 0; i < tokens->length; i++) {
             Token token = tokens->array[i];
             TokenLocation location = token.location;
-            printf("%s at %d-%d:%d: \"%s\"\n", TokenStrings[(int)token.type], location.columnRange.min, location.columnRange.max, location.line, token.lexeme);
+            printf("%s at %d-%d:%d: \"%s\"\n", TOKENS_STRINGS[(int)token.type], location.columnRange.min, location.columnRange.max, location.line, token.lexeme);
         }
 
         Stmts* stmts = Parse(tokens);
         for (int i = 0; i < stmts->length; i++) {
             Stmt stmt = stmts->array[i];
-            printf("%s\n", Stmt2String(stmt));
+            printf("%s\n", stmt_to_string(stmt));
         }
 
-        FreeTokens(tokens);
+        tokens_free(tokens);
     }
 
     return 0;

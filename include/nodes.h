@@ -33,25 +33,25 @@ typedef struct{
     Range lineRange;
 } NodeLocation;
 
-char* NodeLocToString(NodeLocation* nl);
+char* node_location_to_str(NodeLocation* nl);
 
 typedef struct{
     Token token;
     TokenLocations* locations;
 } NodeCore;
 
-NodeCore NewNodeCore(Tokens* tokens);
-NodeCore NewSimpleNodeCore(Token token);
+NodeCore nodecore_new(Tokens* tokens);
+NodeCore nodecore_simple_new(Token token);
 
 /// @brief Gives the full location of the `core`, however many lines that spans
-NodeLocation GetFullLocation(NodeCore core);
+NodeLocation nodecore_get_full_location(NodeCore core);
 /// @brief Gives only the first line location of the `core`
-NodeLocation GetLineLocation(NodeCore core);
+NodeLocation nodecore_get_line_location(NodeCore core);
 
 typedef struct{
     NodeCore core;
 } NodeIdentifier;
-ARRAY_DEF(NodeIdentifier, NodeIdentifiers)
+ARRAY_DEF(NodeIdentifier, NodeIdentifiers, node_identifiers)
 
 typedef struct{
     NodeCore core;
@@ -61,8 +61,13 @@ typedef union{
     NodeIdentifier identifier;
     NodeLiteral literal;
     ExprType type;
+} ExprInner;
+
+typedef struct{
+    ExprType type;
+    ExprInner inner;
 } Expr;
-ARRAY_DEF(Expr, Exprs)
+ARRAY_DEF(Expr, Exprs, exprs)
 
 typedef struct{
     NodeCore core;
@@ -72,11 +77,15 @@ typedef struct{
 
 typedef union{
     VariableDecl vd;
-    StmtType type;
-} Stmt;
-ARRAY_DEF(Stmt, Stmts)
+} StmtInner;
 
-char* Expr2String(Expr expr);
-char* Stmt2String(Stmt stmt);
+typedef struct{
+    StmtType type;
+    StmtInner inner;
+} Stmt;
+ARRAY_DEF(Stmt, Stmts, stmts)
+
+char* expr_to_string(Expr expr);
+char* stmt_to_string(Stmt stmt);
 
 #endif

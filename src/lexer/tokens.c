@@ -5,17 +5,17 @@
 #include <stdbool.h>
 #include "tokens.h"
 
-ARRAY_IMPL(Token, Tokens)
-ARRAY_IMPL(TokenLocation, TokenLocations)
+ARRAY_IMPL(Token, Tokens, tokens)
+ARRAY_IMPL(TokenLocation, TokenLocations, token_locations)
 
-TokenLocation NewTokenLocation(Range columnRange, int line) {
+TokenLocation token_location_new(Range columnRange, int line) {
     TokenLocation tl;
     tl.columnRange = columnRange;
     tl.line = line;
     return tl;
 }
 
-Token NewToken(TokenType type, char* lexeme, int columnEnd, int line) {
+Token token_new(TokenType type, char* lexeme, int columnEnd, int line) {
     int len = strlen(lexeme);
 
     Token token;
@@ -24,21 +24,21 @@ Token NewToken(TokenType type, char* lexeme, int columnEnd, int line) {
     token.lexeme = malloc(sizeof(char)*len);
     strcpy(token.lexeme, lexeme);
 
-    token.location = NewTokenLocation(NewRange(columnEnd-len, columnEnd), line);
+    token.location = token_location_new(range_new(columnEnd-len, columnEnd), line);
     return token;
 }
 
-TokenType IdentIsKeyword(char* ident) {
+TokenType is_ident_keyword(char* ident) {
     bool isLower = islower(ident[0]);
     TokenType res = Invalid;
     if (isLower) 
         ident[0] = toupper(ident[0]);
         
-    for (int i = 0; i < TokensLen; i++) {
+    for (int i = 0; i < TOKENS_LENGTH; i++) {
         if (i >= (int)Identifier) {
             goto exit;
         }
-        if (strcmp(ident, TokenStrings[i]) == 0) {
+        if (strcmp(ident, TOKENS_STRINGS[i]) == 0) {
             res = (TokenType)i;
             goto exit;
         }

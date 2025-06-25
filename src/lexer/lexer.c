@@ -16,8 +16,8 @@ const char* Tokenize(const char* fileName, Tokens* tokens) {
     
     int line = 1;
     int columnEnd = 0;
-    StrBuf* identBuf = NewStrBuf();
-    StrBuf* numBuf = NewStrBuf();
+    StrBuf* identBuf = strbuf_new();
+    StrBuf* numBuf = strbuf_new();
     bool isString = false;
 
     char o;
@@ -30,39 +30,39 @@ const char* Tokenize(const char* fileName, Tokens* tokens) {
                 line++;
                 columnEnd = 0;
                 isString = false;
-                ResetStrBuf(identBuf);
+                strbuf_reset(identBuf);
                 continue;
             }
             if (o == '\"') {
                 isString = false;
-                AddToken(tokens, NewToken(Str, identBuf->array, columnEnd-1, line));
-                ResetStrBuf(identBuf);
+                tokens_add(tokens, token_new(Str, identBuf->array, columnEnd-1, line));
+                strbuf_reset(identBuf);
                 continue;
             }
-            Write(identBuf, o);
+            strbuf_write(identBuf, o);
             continue;
         }
         
         if (isalpha(o)) {
-            Write(identBuf, o);
+            strbuf_write(identBuf, o);
             continue;
         }
         if (strcmp(identBuf->array, "") != 0) {
-            Token token = NewToken(Identifier, identBuf->array, columnEnd, line);
-            TokenType tt = IdentIsKeyword(token.lexeme);
+            Token token = token_new(Identifier, identBuf->array, columnEnd, line);
+            TokenType tt = is_ident_keyword(token.lexeme);
             if (tt != Invalid) {
                 token.type = tt;
             }
-            AddToken(tokens, token);
-            ResetStrBuf(identBuf);
+            tokens_add(tokens, token);
+            strbuf_reset(identBuf);
         }
         if (isdigit(o)) {
-            Write(numBuf, o);
+            strbuf_write(numBuf, o);
             continue;
         }
         if (strcmp(numBuf->array, "") != 0) {
-            AddToken(tokens, NewToken(Number, numBuf->array, columnEnd, line));
-            ResetStrBuf(numBuf);
+            tokens_add(tokens, token_new(Number, numBuf->array, columnEnd, line));
+            strbuf_reset(numBuf);
         }
         if (o == EOF) {
             break;
@@ -72,40 +72,40 @@ const char* Tokenize(const char* fileName, Tokens* tokens) {
                 isString = true;
                 break;
             case '=':
-                AddToken(tokens, NewToken(Equal, "=", columnEnd, line));
+                tokens_add(tokens, token_new(Equal, "=", columnEnd, line));
                 break;
             case ',':
-                AddToken(tokens, NewToken(Comma, ",", columnEnd, line));
+                tokens_add(tokens, token_new(Comma, ",", columnEnd, line));
                 break;
             case '(':
-                AddToken(tokens, NewToken(OpenParen, "(", columnEnd, line));
+                tokens_add(tokens, token_new(OpenParen, "(", columnEnd, line));
                 break;
             case ')':
-                AddToken(tokens, NewToken(OpenParen, ")", columnEnd, line));
+                tokens_add(tokens, token_new(OpenParen, ")", columnEnd, line));
                 break;
             case ':':
-                AddToken(tokens, NewToken(Colon, ":", columnEnd, line));
+                tokens_add(tokens, token_new(Colon, ":", columnEnd, line));
                 break;
             case ';':
-                AddToken(tokens, NewToken(Semicolon, ";", columnEnd, line));
+                tokens_add(tokens, token_new(Semicolon, ";", columnEnd, line));
                 break;
             case '-':
-                AddToken(tokens, NewToken(Slash, "-", columnEnd, line));
+                tokens_add(tokens, token_new(Slash, "-", columnEnd, line));
                 break;
             case '>':
-                AddToken(tokens, NewToken(Greater, ">", columnEnd, line));
+                tokens_add(tokens, token_new(Greater, ">", columnEnd, line));
                 break;
             case '<':
-                AddToken(tokens, NewToken(Less, "<", columnEnd, line));
+                tokens_add(tokens, token_new(Less, "<", columnEnd, line));
                 break;
             case '^':
-                AddToken(tokens, NewToken(Caret, "^", columnEnd, line));
+                tokens_add(tokens, token_new(Caret, "^", columnEnd, line));
                 break;
             case '*':
-                AddToken(tokens, NewToken(Asterisk, "*", columnEnd, line));
+                tokens_add(tokens, token_new(Asterisk, "*", columnEnd, line));
                 break;
             case '$':
-                AddToken(tokens, NewToken(Dollar, "$", columnEnd, line));
+                tokens_add(tokens, token_new(Dollar, "$", columnEnd, line));
                 break;
             case '\n':
                 line++;
@@ -113,11 +113,11 @@ const char* Tokenize(const char* fileName, Tokens* tokens) {
                 break;
         }
     }
-    AddToken(tokens, NewToken(Eof, "", columnEnd, line));
+    tokens_add(tokens, token_new(Eof, "", columnEnd, line));
 
     fclose(file);
-    FreeStrBuf(identBuf);
-    FreeStrBuf(numBuf);
+    strbuf_free(identBuf);
+    strbuf_free(numBuf);
     return NULL;
 }
 
