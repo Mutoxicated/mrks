@@ -6,7 +6,37 @@
 #include "tokens.h"
 #include "dbg_options.h"
 
-ARRAY_IMPL(Token, Tokens, tokens)
+// FLAG 1
+
+* _new() { 
+    * arr = malloc(sizeof()); 
+    * innerArray = NULL; 
+    arr->array = innerArray; 
+    arr->length = 0; 
+
+    return arr; 
+} 
+
+void _add(* arr,  token) { 
+    arr->length++; 
+    if (arr->array == NULL) { 
+        arr->array = malloc(sizeof()); 
+        arr->array[0] = token;
+ 
+        return; 
+    } 
+    arr->array = realloc(arr->array, sizeof()*arr->length); 
+    arr->array[arr->length-1] = token; 
+} 
+
+void _free(* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
+    arr = NULL;
+}
 ARRAY_IMPL(TokenLocation, TokenLocations, token_locations)
 
 TokenLocation token_location_new(Range columnRange, int line) {
@@ -48,4 +78,4 @@ TokenType is_ident_keyword(char* ident) {
     if (isLower)
         ident[0] = tolower(ident[0]);
     return res;
-}
+}ÿ

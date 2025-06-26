@@ -25,7 +25,9 @@
         "utility": "c",
         "string_view": "c",
         "concepts": "c",
-        "span": "c"
+        "span": "c",
+        "stdarg.h": "c",
+        "cstdlib": "c"
     },
     "makefile.configureOnOpen": false,
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",

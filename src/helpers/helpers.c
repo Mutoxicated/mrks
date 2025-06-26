@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include "macros.h"
 #include "helpers.h"
 #include "dbg_options.h"
 
@@ -18,12 +17,25 @@ StrBuf strbuf_new() {
     buf.array = malloc(sizeof(char));
     buf.array[0] = '\0';
     buf.length = 0;
+    buf.cap = 1;
+    return buf;
+}
+
+StrBuf strbuf_new_cap(int cap) {
+    StrBuf buf;
+    buf.array = malloc(sizeof(char)*(cap+1));
+    buf.array[0] = '\0';
+    buf.length = 0;
+    buf.cap = cap;
     return buf;
 }
 
 void strbuf_write(StrBuf* buf, char c) {
     buf->length++;
-    buf->array = realloc(buf->array, sizeof(char)*(buf->length+1));
+    if (buf->length > buf->cap-1) {
+        buf->cap++;
+        buf->array = realloc(buf->array, sizeof(char)*(buf->cap+1));
+    }
     buf->array[buf->length-1] = c;
     buf->array[buf->length] = '\0';
 }
@@ -43,7 +55,10 @@ void strbuf_write_string(StrBuf* buf, ...) {
     
     int startIndex = buf->length;
     buf->length += strLen;
-    buf->array = realloc(buf->array, sizeof(char)*(buf->length+1));
+    if (buf->length > buf->cap-1) {
+        buf->cap = buf->length+1;
+        buf->array = realloc(buf->array, sizeof(char)*(buf->cap+1));
+    }
 
     va_start(args, buf);
     while ( (arg = va_arg(args, char*)) ) {

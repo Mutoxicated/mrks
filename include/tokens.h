@@ -60,7 +60,7 @@ typedef struct {
     TokenLocation location;
 } Token;
 
-ARRAY_DEF(Token, Tokens, tokens)
+// FLAG 1
 
 Token token_new(TokenType type, char* lexeme, int columnEnd, int line);
 TokenType is_ident_keyword(char* ident);
