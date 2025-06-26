@@ -18,3 +18,5 @@ let function b be:
         return
 
 print("hi ")
+
+// Comment // TOKEN

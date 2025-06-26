@@ -17,23 +17,52 @@ const char* Tokenize(FILE* file, Tokens* tokens) {
     StrBuf* ident_buf = &_ident_buf;
     StrBuf _num_buf = strbuf_new();
     StrBuf* num_buf = &_num_buf;
-    bool isString = false;
+    bool is_string = false;
+    bool is_comment = false;
+    bool is_multiline_comment = false;
 
     char o;
     while (true) {
         o = fgetc(file);
         columnEnd++;
 
-        if (isString) {
+        if (is_multiline_comment) {
+            if (o == EOF) {
+                is_comment = false;
+            }
             if (o == '\n') {
                 line++;
                 columnEnd = 0;
-                isString = false;
+            }
+            if (o == '*' && fgetc(file) == '/') {
+                is_multiline_comment = false;
+            }
+            continue;
+        }
+        if (is_comment) {
+            if (o == EOF) {
+                is_comment = false;
+            }
+            if (o == '\n') {
+                is_comment = false;
+                line++;
+                columnEnd = 0;
+            }
+            if (o == '/' && fgetc(file) == '/') {
+                is_comment = false;
+            }
+            continue;
+        }
+        if (is_string) {
+            if (o == '\n') {
+                line++;
+                columnEnd = 0;
+                is_string = false;
                 strbuf_reset(ident_buf);
                 continue;
             }
             if (o == '\"') {
-                isString = false;
+                is_string = false;
                 tokens_add(tokens, token_new(Str, _ident_buf.array, columnEnd-1, line));
                 strbuf_reset(ident_buf);
                 continue;
@@ -68,7 +97,7 @@ const char* Tokenize(FILE* file, Tokens* tokens) {
         }
         switch (o) {
             case '\"':
-                isString = true;
+                is_string = true;
                 break;
             case '=':
                 tokens_add(tokens, token_new(Equal, "=", columnEnd, line));
@@ -85,11 +114,8 @@ const char* Tokenize(FILE* file, Tokens* tokens) {
             case ':':
                 tokens_add(tokens, token_new(Colon, ":", columnEnd, line));
                 break;
-            case ';':
-                tokens_add(tokens, token_new(Semicolon, ";", columnEnd, line));
-                break;
             case '-':
-                tokens_add(tokens, token_new(Slash, "-", columnEnd, line));
+                tokens_add(tokens, token_new(Dash, "-", columnEnd, line));
                 break;
             case '>':
                 tokens_add(tokens, token_new(Greater, ">", columnEnd, line));
@@ -103,10 +129,26 @@ const char* Tokenize(FILE* file, Tokens* tokens) {
             case '*':
                 tokens_add(tokens, token_new(Asterisk, "*", columnEnd, line));
                 break;
+            case '+':
+                tokens_add(tokens, token_new(Dash, "+", columnEnd, line));
+                break;
+            case '/':
+                char next_o = fgetc(file);
+                if (next_o == '/') {
+                    is_comment = true;
+                    break;
+                }else if (next_o == '*') {
+                    is_multiline_comment = true;
+                    break;
+                }
+                fseek(file, -1, SEEK_CUR);
+                tokens_add(tokens, token_new(Slash, "/", columnEnd, line));
+                break;
             case '$':
                 tokens_add(tokens, token_new(Dollar, "$", columnEnd, line));
                 break;
             case '\n':
+                tokens_add(tokens, token_new(Semicolon, ";", columnEnd, line));
                 line++;
                 columnEnd = 0;
                 break;
@@ -119,4 +161,3 @@ const char* Tokenize(FILE* file, Tokens* tokens) {
     strbuf_free(num_buf);
     return NULL;
 }
-

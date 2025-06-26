@@ -86,11 +86,14 @@ void node_identifiers_add(NodeIdentifiers* arr, NodeIdentifier token);
 void node_identifiers_free(NodeIdentifiers* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
-typedef struct{
+typedef struct VariableDecl VariableDecl;
+struct VariableDecl {
     NodeCore core;
     NodeIdentifiers identifiers;
     Exprs expressions;
-} VariableDecl;
+};
+
+VariableDecl variable_decl_new(Token t);
 
 typedef struct Stmt Stmt;
 
@@ -101,8 +104,12 @@ struct Stmt{
     StmtType type;
 };
 
+VariableDecl VarDecl(Stmt stmt);
+
 char* expr_to_string(Expr expr);
 char* stmt_to_string(Stmt stmt);
+
+Stmt node_into_stmt(StmtType type, void* any);
 
 // FLAG 3 D 153
 typedef struct { 

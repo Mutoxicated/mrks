@@ -29,7 +29,7 @@ const char* compiler_action(char* filename) {
     if (err != NULL) {
         goto exit;
     }
-    printf(BOLD_WHITE("--> Tokens:\n") WHITE());
+    printf(BOLD_WHITE("--------------------------------------> Tokens:\n") WHITE());
     for (int i = 0; i < tokens->length; i++) {
         Token token = tokens->array[i];
         TokenLocation location = token.location;
@@ -38,7 +38,7 @@ const char* compiler_action(char* filename) {
     printf(WHITE());
 
     Stmts* stmts = Parse(tokens);
-    printf(BOLD_WHITE("--> Nodes:\n") WHITE());
+    printf(BOLD_WHITE("--------------------------------------> Nodes:\n") WHITE());
     for (int i = 0; i < stmts->length; i++) {
         Stmt stmt = stmts->array[i];
         printf("%s\n", stmt_to_string(stmt));

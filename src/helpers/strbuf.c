@@ -31,7 +31,7 @@ void strbuf_write(StrBuf* buf, char c) {
     buf->array[buf->length] = '\0';
 }
 /* Variadic parameters MUST ALL BE char* and at the end there should be a NULL */
-void strbuf_write_string(StrBuf* buf, ...) {
+void _strbuf_write_string(StrBuf* buf, ...) {
     va_list args;
     va_start(args, buf);
     char* arg;

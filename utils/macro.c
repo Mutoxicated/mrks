@@ -206,7 +206,7 @@ int main(int argc, char const *argv[]) {
                 for (int k = 0; k < macro_found_params.u.arr.size; k++) {
                     const char* param = macro_found_params.u.arr.elem[k].u.s;
                     if (strcmp(param, source_param) == 0) {
-                        strbuf_write_string(buf, invocation.u.tab.value[1].u.arr.elem[k].u.s, NULL);
+                        strbuf_write_string(buf, invocation.u.tab.value[1].u.arr.elem[k].u.s);
                         break;
                     }
                 }
@@ -312,11 +312,11 @@ int main(int argc, char const *argv[]) {
                     continue;
                 }
                 printf("Flag %d found! Writing source instance.\n", flag);
-                strbuf_write_string(file_buffer, " FLAG ", itoa(flag, 10), " D ", itoa(_buf.length, 10), NULL);
+                strbuf_write_string(file_buffer, " FLAG ", itoa(flag, 10), " D ", itoa(_buf.length, 10));
                 strbuf_write(file_buffer, c);
-                strbuf_write_string(file_buffer, _buf.array, NULL);
+                strbuf_write_string(file_buffer, _buf.array);
                 if (!flag_update) {
-                    strbuf_write_string(file_buffer, "// END: DON'T MANIPULATE THIS AREA!\n", NULL);
+                    strbuf_write_string(file_buffer, "// END: DON'T MANIPULATE THIS AREA!\n");
                 }
                 flag = -1;
                 passed_chars = 0;
@@ -374,6 +374,7 @@ int main(int argc, char const *argv[]) {
             printf("\n");
         }
     }
+    printf("\n*** Successfully expanded all macro invocations! ***\n");
     exit:
     toml_free(result);
     return 0;

@@ -23,20 +23,15 @@ Stmts* Parse(Tokens* tokens) {
 
     Stmts* stmts = stmts_new();
 
-    Token t;
+    Token t = tget(&ts);
+    VariableDecl vd = variable_decl_new(t);
+    stmts_add(stmts, node_into_stmt(VariableDeclaration, &vd));
     while (true) {
         t = tget(&ts);
         if (t.type == Eof) {
             break;
         }
     }
-
-    VariableDecl vd;
-    vd.core = nodecore_simple_new(t);
-    Stmt stmt;
-    stmt.inner.vd = vd;
-    stmt.type = VariableDeclaration;
-    stmts_add(stmts, stmt);
 
     return stmts;
 }

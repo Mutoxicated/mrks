@@ -6,6 +6,7 @@
 #include "macros.h"
 #include "dbg_options.h"
 #include "strbuf.h"
+#include "color.h"
 
 // FLAG 1 D 628
 Exprs* exprs_new() { 
@@ -103,10 +104,21 @@ void stmts_free(Stmts* arr) {
 }
 // END: DON'T MANIPULATE THIS AREA!
 
+Stmt node_into_stmt(StmtType type, void* any) {
+    Stmt stmt = {.type = type};
+    
+    switch (type) {
+        case VariableDeclaration:
+            stmt.inner.vd = *(VariableDecl*)(any);
+    }
+    return stmt;
+}
+
+
 char* node_location_to_str(NodeLocation* nl) {
     StrBuf _buf = strbuf_new();
     StrBuf* buf = &_buf;
-    strbuf_write_string(buf, itoa(nl->columnRange.min, 10), ":", itoa(nl->lineRange.min, 10), NULL);
+    strbuf_write_string(buf, itoa(nl->columnRange.min, 10), ":", itoa(nl->lineRange.min, 10));
 
     char* str = strbuf_get_str(buf);
     strbuf_free(buf);
@@ -138,11 +150,22 @@ char* expr_to_string(Expr expr) {
 char* stmt_to_string(Stmt stmt) {
     StrBuf _buf = strbuf_new();
     StrBuf* buf = &_buf;
+
     switch (stmt.type) {
         case VariableDeclaration:
             VariableDecl vd = stmt.inner.vd;
             NodeLocation nl = nodecore_get_line_location(&vd.core);
-            strbuf_write_string(buf, stmtStrings[(int)stmt.type], " at ", node_location_to_str(&nl), ":", NULL);
+            strbuf_write_string(buf, 
+                CYAN(), stmtStrings[(int)stmt.type], WHITE(), " ("YELLOW(), vd.core.token.lexeme, WHITE()")",
+                " at ", node_location_to_str(&nl), ":\n\t"CYAN("Expressions: \n")WHITE()
+            );
+            for (int i = 0; i < vd.expressions.length; i++) {
+                strbuf_write_string(buf, "\t\t", expr_to_string(vd.expressions.array[i]));
+            }
+            strbuf_write_string(buf, CYAN()"\tIdentifiers: \n"WHITE());
+            for (int i = 0; i < vd.identifiers.length; i++) {
+                strbuf_write_string(buf, "\t\t", vd.identifiers.array[i].core.token.lexeme);
+            }
             break;
     }
     char* res = strbuf_get_str(buf);
@@ -169,4 +192,15 @@ NodeCore nodecore_simple_new(Token token) {
     token_locations_add(&nc.locations, token.location);
 
     return nc;
+}
+
+/* NODE CONSTRUCTORS */
+VariableDecl variable_decl_new(Token t) {
+    VariableDecl vd;
+    vd.core = nodecore_simple_new(t);
+    vd.expressions.array = NULL;
+    vd.expressions.length = 0;
+    vd.identifiers.array = NULL;
+    vd.identifiers.length = 0;
+    return vd;
 }

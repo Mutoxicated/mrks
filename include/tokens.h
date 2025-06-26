@@ -14,7 +14,6 @@
         TOKEN(CloseParen)  \
         \
         TOKEN(Dot)  \
-        TOKEN(Slash)  \
         TOKEN(Comma)  \
         TOKEN(Dollar) \
         TOKEN(Colon) \
@@ -23,6 +22,10 @@
         TOKEN(Equal)   \
         TOKEN(Less)  \
         TOKEN(Greater)  \
+        \
+        TOKEN(Plus) \
+        TOKEN(Dash)  \
+        TOKEN(Slash) \
         TOKEN(Asterisk) \
         TOKEN(Caret) \
         \
