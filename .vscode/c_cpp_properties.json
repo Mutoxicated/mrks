@@ -16,9 +16,10 @@
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64",
             "compilerArgs": [
-                "-i ${workspaceFolder}/include"
+                "-i /lib/gcc/x86_64-linux-gnu/13/include"
             ],
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "browse": {}
         }
     ],
     "version": 4

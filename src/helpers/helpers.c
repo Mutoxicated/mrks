@@ -93,17 +93,15 @@ char* strbuf_get_str(StrBuf* buf) {
     return str;
 }
 
-ARRAY_IMPL(Range, Ranges, ranges)
-ARRAY_IMPL(int, ints, ints)
-
 Strings* strings_new(char* str) {
     Strings* strings = malloc(sizeof(Strings));
     int len = strlen(str);
     strings->str = malloc(sizeof(char)*len);
     strcpy(strings->str, str);
     strings->length = 1;
-    strings->strStarts = ints_new();
-    ints_add(strings->strStarts, 0);
+    strings->strStarts.array = NULL;
+    strings->strStarts.length = 0;
+    ints_add(&strings->strStarts, 0);
     strings->strLen = strlen(str);
 
     return strings;
@@ -129,7 +127,7 @@ void strings_add(Strings* strings, char* str) {
         if (strings->str[i] == '\0') {
             currentStrIndex++;
             if (currentStrIndex == strings->length) {
-                ints_add(strings->strStarts, i+1);
+                ints_add(&strings->strStarts, i+1);
             }
         }
     }
@@ -141,7 +139,7 @@ char* strings_get_by_index(Strings* strings, int index) {
     StrBuf buf = strbuf_new();
     StrBuf* bufptr = &buf;
 
-    int i = strings->strStarts->array[index];
+    int i = strings->strStarts.array[index];
     while (true) {
         if (strings->str[i] == '\0') {
             break;
@@ -159,7 +157,7 @@ char* strings_get_by_index(Strings* strings, int index) {
 
 void strings_free(Strings* strings) {
     free(strings->str);
-    ints_free(strings->strStarts);
+    ints_free(&strings->strStarts);
     free(strings);
     strings = NULL;
 }

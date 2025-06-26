@@ -52,8 +52,6 @@ typedef struct {
 } TokenLocation;
 TokenLocation token_location_new(Range columnRange, int line);
 
-ARRAY_DEF(TokenLocation, TokenLocations, token_locations)
-
 typedef struct {
     TokenType type;
     char* lexeme;

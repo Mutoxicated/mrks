@@ -3,6 +3,6 @@
 
 #include "helpers.h"
 
-int compiler_action(Strings* dir);
+const char* compiler_action(char* filename);
 
 #endif
