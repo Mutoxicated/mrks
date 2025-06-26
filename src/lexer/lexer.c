@@ -8,6 +8,7 @@
 #include "helpers.h"
 #include "color.h"
 #include "dbg_options.h"
+#include "strbuf.h"
 
 const char* Tokenize(FILE* file, Tokens* tokens) {    
     int line = 1;

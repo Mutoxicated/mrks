@@ -5,10 +5,103 @@
 #include "helpers.h"
 #include "macros.h"
 #include "dbg_options.h"
+#include "strbuf.h"
 
-ARRAY_IMPL(Expr, Exprs, exprs)
-ARRAY_IMPL(Stmt, Stmts, stmts)
-ARRAY_IMPL(NodeIdentifier, NodeIdentifiers, node_identifiers)
+// FLAG 1 D 628
+Exprs* exprs_new() { 
+    Exprs* arr = malloc(sizeof(Exprs)); 
+    Expr* innerArray = NULL; 
+    arr->array = innerArray; 
+    arr->length = 0; 
+
+    return arr; 
+} 
+
+void exprs_add(Exprs* arr, Expr token) { 
+    arr->length++; 
+    if (arr->array == NULL) { 
+        arr->array = malloc(sizeof(Expr)); 
+        arr->array[0] = token;
+ 
+        return; 
+    } 
+    arr->array = realloc(arr->array, sizeof(Expr)*arr->length); 
+    arr->array[arr->length-1] = token; 
+} 
+
+void exprs_free(Exprs* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
+    arr = NULL;
+}
+// END: DON'T MANIPULATE THIS AREA!
+
+// FLAG 2 D 751
+NodeIdentifiers* node_identifiers_new() { 
+    NodeIdentifiers* arr = malloc(sizeof(NodeIdentifiers)); 
+    NodeIdentifier* innerArray = NULL; 
+    arr->array = innerArray; 
+    arr->length = 0; 
+
+    return arr; 
+} 
+
+void node_identifiers_add(NodeIdentifiers* arr, NodeIdentifier token) { 
+    arr->length++; 
+    if (arr->array == NULL) { 
+        arr->array = malloc(sizeof(NodeIdentifier)); 
+        arr->array[0] = token;
+ 
+        return; 
+    } 
+    arr->array = realloc(arr->array, sizeof(NodeIdentifier)*arr->length); 
+    arr->array[arr->length-1] = token; 
+} 
+
+void node_identifiers_free(NodeIdentifiers* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
+    arr = NULL;
+}
+// END: DON'T MANIPULATE THIS AREA!
+
+// FLAG 3 D 628
+Stmts* stmts_new() { 
+    Stmts* arr = malloc(sizeof(Stmts)); 
+    Stmt* innerArray = NULL; 
+    arr->array = innerArray; 
+    arr->length = 0; 
+
+    return arr; 
+} 
+
+void stmts_add(Stmts* arr, Stmt token) { 
+    arr->length++; 
+    if (arr->array == NULL) { 
+        arr->array = malloc(sizeof(Stmt)); 
+        arr->array[0] = token;
+ 
+        return; 
+    } 
+    arr->array = realloc(arr->array, sizeof(Stmt)*arr->length); 
+    arr->array[arr->length-1] = token; 
+} 
+
+void stmts_free(Stmts* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
+    arr = NULL;
+}
+// END: DON'T MANIPULATE THIS AREA!
 
 char* node_location_to_str(NodeLocation* nl) {
     StrBuf _buf = strbuf_new();

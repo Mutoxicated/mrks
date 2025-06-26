@@ -3,12 +3,12 @@ name = "ARRAY_DEF"
 params = ["TYPE", "NAME", "LNAME"]
 source = """
 typedef struct { 
-    TYPE* array; 
+    $TYPE* array; 
     int length; 
-} NAME; 
-NAME* LNAME##_new(); 
-void LNAME##_add(NAME* arr, TYPE token);
-void LNAME##_free(NAME* arr);
+} $NAME; 
+$NAME* $LNAME##_new(); 
+void $LNAME##_add($NAME* arr, $TYPE token);
+void $LNAME##_free($NAME* arr);
 """
 
 [[macros]]
@@ -57,3 +57,66 @@ name = "ARRAY_IMPL"
 args = ["Token", "Tokens", "tokens"]
 destination = "/src/lexer/tokens.c"
 flag = 1
+
+[[invocations]] 
+name = "ARRAY_DEF"
+args = ["TokenLocation", "TokenLocations", "token_locations"]
+destination = "/include/tokens.h"
+flag = 2
+
+[[invocations]]
+name = "ARRAY_IMPL"
+args = ["TokenLocation", "TokenLocations", "token_locations"]
+destination = "/src/lexer/tokens.c"
+flag = 2
+
+[[invocations]] 
+name = "ARRAY_DEF"
+args = ["int", "ints", "ints"]
+destination = "/include/helpers.h"
+flag = 1
+
+[[invocations]]
+name = "ARRAY_IMPL"
+args = ["int", "ints", "ints"]
+destination = "/src/helpers/helpers.c"
+flag = 1
+
+
+[[invocations]] 
+name = "ARRAY_DEF"
+args = ["Expr", "Exprs", "exprs"]
+destination = "/include/nodes.h"
+flag = 1
+
+[[invocations]]
+name = "ARRAY_IMPL"
+args = ["Expr", "Exprs", "exprs"]
+destination = "/src/parser/nodes.c"
+flag = 1
+
+
+[[invocations]] 
+name = "ARRAY_DEF"
+args = ["NodeIdentifier", "NodeIdentifiers", "node_identifiers"]
+destination = "/include/nodes.h"
+flag = 2
+
+[[invocations]]
+name = "ARRAY_IMPL"
+args = ["NodeIdentifier", "NodeIdentifiers", "node_identifiers"]
+destination = "/src/parser/nodes.c"
+flag = 2
+
+
+[[invocations]] 
+name = "ARRAY_DEF"
+args = ["Stmt", "Stmts", "stmts"]
+destination = "/include/nodes.h"
+flag = 3
+
+[[invocations]]
+name = "ARRAY_IMPL"
+args = ["Stmt", "Stmts", "stmts"]
+destination = "/src/parser/nodes.c"
+flag = 3

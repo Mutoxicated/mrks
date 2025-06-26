@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=
 
-SRC= ./utils/toml/tomlc17.c ./utils/macro.c ./src/helpers/helpers.c 
+SRC= ./utils/toml/tomlc17.c ./utils/macro.c ./src/helpers/strbuf.c 
 OBJ=$(SRC:%.c=%.o)
 DEP=$(OBJ:%.o=%.d)
 
@@ -10,7 +10,7 @@ EXE=./utils/utils.exe
 TARGET=/usr/local
 
 all: debug
-	./utils/utils.exe
+	./utils/utils.exe verbose
 
 debug: CFLAGS += -g
 debug: $(EXE)

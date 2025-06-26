@@ -20,8 +20,13 @@
         "dbg_options.h": "c",
         "dbg_internal.h": "c",
         "cstdlib": "c",
-        "stdarg.h": "c"
+        "stdarg.h": "c",
+        "type_traits": "c"
     },
+    "C_Cpp.autocomplete": "default",
+    "C_Cpp.codeAnalysis.clangTidy.codeAction.formatFixes": true,
+    "C_Cpp.codeAnalysis.runAutomatically": true,
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
-    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.errorSquiggles": "enabled",
 }

@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <stdarg.h>
 #include "helpers.h"
 #include "dbg_options.h"
+#include "strbuf.h"
 
 Range range_new(int min, int max) {
     Range range;
@@ -12,86 +12,37 @@ Range range_new(int min, int max) {
     return range;
 }
 
-StrBuf strbuf_new() {
-    StrBuf buf;
-    buf.array = malloc(sizeof(char));
-    buf.array[0] = '\0';
-    buf.length = 0;
-    buf.cap = 1;
-    return buf;
-}
+// FLAG 1 D 616
+ints* ints_new() { 
+    ints* arr = malloc(sizeof(ints)); 
+    int* innerArray = NULL; 
+    arr->array = innerArray; 
+    arr->length = 0; 
 
-StrBuf strbuf_new_cap(int cap) {
-    StrBuf buf;
-    buf.array = malloc(sizeof(char)*(cap+1));
-    buf.array[0] = '\0';
-    buf.length = 0;
-    buf.cap = cap;
-    return buf;
-}
+    return arr; 
+} 
 
-void strbuf_write(StrBuf* buf, char c) {
-    buf->length++;
-    if (buf->length > buf->cap-1) {
-        buf->cap++;
-        buf->array = realloc(buf->array, sizeof(char)*(buf->cap+1));
+void ints_add(ints* arr, int token) { 
+    arr->length++; 
+    if (arr->array == NULL) { 
+        arr->array = malloc(sizeof(int)); 
+        arr->array[0] = token;
+ 
+        return; 
+    } 
+    arr->array = realloc(arr->array, sizeof(int)*arr->length); 
+    arr->array[arr->length-1] = token; 
+} 
+
+void ints_free(ints* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
     }
-    buf->array[buf->length-1] = c;
-    buf->array[buf->length] = '\0';
+    arr->length = 0;
+    arr = NULL;
 }
-/* Variadic parameters MUST ALL BE char* and at the end there should be a NULL */
-void strbuf_write_string(StrBuf* buf, ...) {
-    va_list args;
-    va_start(args, buf);
-    char* arg;
-    int strLen = 0;
-    while ( (arg = va_arg(args, char*)) != 0) {
-        if (arg == NULL) {
-            break;
-        }
-        strLen += strlen(arg);
-    }
-    va_end(args);
-    
-    int startIndex = buf->length;
-    buf->length += strLen;
-    if (buf->length > buf->cap-1) {
-        buf->cap = buf->length+1;
-        buf->array = realloc(buf->array, sizeof(char)*(buf->cap+1));
-    }
-
-    va_start(args, buf);
-    while ( (arg = va_arg(args, char*)) ) {
-        if (arg == NULL) {
-            break;
-        }
-        int strLenArg = strlen(arg);
-        for (int i = 0; i < strLenArg; i++) {
-            buf->array[startIndex+i] = arg[i]; 
-        }
-        startIndex += strLenArg;
-    }
-    va_end(args);
-   
-    buf->array[buf->length] = '\0';
-}
-
-void strbuf_reset(StrBuf* buf) {
-    buf->array[0] = '\0';
-    buf->length = 0;
-}
-
-void strbuf_free(StrBuf* buf) {
-    free(buf->array);
-    buf->array = NULL;
-    buf->length = 0;
-}
-
-char* strbuf_get_str(StrBuf* buf) {
-    char* str = malloc(sizeof(char)*buf->length);
-    strcpy(str, buf->array);
-    return str;
-}
+// END: DON'T MANIPULATE THIS AREA!
 
 Strings* strings_new(char* str) {
     Strings* strings = malloc(sizeof(Strings));

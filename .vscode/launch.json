@@ -10,11 +10,11 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "program": "${workspaceRoot}/build/mrks",
+            "program": "${workspaceRoot}/build/markus",
             "linux": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "gdb",
-                "program": "${workspaceFolder}/build/mrks"
+                "program": "${workspaceFolder}/build/markus"
             },
             "osx": {
                 "MIMode": "lldb",

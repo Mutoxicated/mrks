@@ -3,41 +3,27 @@
 
 #include "macros.h"
 
-typedef struct { 
-    int length; 
-    struct{}* array; 
-} Array; 
-
-Array array_new(); 
-void array_add(Array* arr, struct{} obj); 
-struct{}* array_get(Array* arr, int index);
-void array_free(Array* arr);
-
-typedef struct{
-    char* array;
-    int length;
-    int cap;
-} StrBuf;
-
-StrBuf strbuf_new();
-StrBuf strbuf_new_cap(int cap);
-void strbuf_write(StrBuf* buf, char c);
-void strbuf_write_string(StrBuf* buf, ...);
-void strbuf_reset(StrBuf* buf);
-void strbuf_free(StrBuf* buf);
-char* strbuf_get_str(StrBuf* buf);
-
 typedef struct{
     int min;
     int max;
 } Range;
 Range range_new(int min, int max);
 
+// FLAG 1 D 144
+typedef struct { 
+    int* array; 
+    int length; 
+} ints; 
+ints* ints_new(); 
+void ints_add(ints* arr, int token);
+void ints_free(ints* arr);
+// END: DON'T MANIPULATE THIS AREA!
+
 typedef struct{
     char* str;
     int length;
     int strLen;
-    Array strStarts;
+    ints strStarts;
 } Strings;
 Strings* strings_new(char* str);
 void strings_add(Strings* strings, char* str);

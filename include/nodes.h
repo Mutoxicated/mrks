@@ -56,16 +56,35 @@ typedef struct{
     NodeCore core;
 } NodeLiteral;
 
-typedef union{
-    NodeIdentifier identifier;
-    NodeLiteral literal;
-    ExprType type;
-} ExprInner;
+typedef struct Expr Expr;
 
-typedef struct{
+struct Expr {
+    union{
+        NodeIdentifier identifier;
+        NodeLiteral literal;
+    } inner;
     ExprType type;
-    ExprInner inner;
-} Expr;
+};
+
+// FLAG 1 D 153
+typedef struct { 
+    Expr* array; 
+    int length; 
+} Exprs; 
+Exprs* exprs_new(); 
+void exprs_add(Exprs* arr, Expr token);
+void exprs_free(Exprs* arr);
+// END: DON'T MANIPULATE THIS AREA!
+
+// FLAG 2 D 246
+typedef struct { 
+    NodeIdentifier* array; 
+    int length; 
+} NodeIdentifiers; 
+NodeIdentifiers* node_identifiers_new(); 
+void node_identifiers_add(NodeIdentifiers* arr, NodeIdentifier token);
+void node_identifiers_free(NodeIdentifiers* arr);
+// END: DON'T MANIPULATE THIS AREA!
 
 typedef struct{
     NodeCore core;
@@ -73,16 +92,26 @@ typedef struct{
     Exprs expressions;
 } VariableDecl;
 
-typedef union{
-    VariableDecl vd;
-} StmtInner;
+typedef struct Stmt Stmt;
 
-typedef struct{
+struct Stmt{
+    union{
+        VariableDecl vd;
+    } inner;
     StmtType type;
-    StmtInner inner;
-} Stmt;
+};
 
 char* expr_to_string(Expr expr);
 char* stmt_to_string(Stmt stmt);
+
+// FLAG 3 D 153
+typedef struct { 
+    Stmt* array; 
+    int length; 
+} Stmts; 
+Stmts* stmts_new(); 
+void stmts_add(Stmts* arr, Stmt token);
+void stmts_free(Stmts* arr);
+// END: DON'T MANIPULATE THIS AREA!
 
 #endif

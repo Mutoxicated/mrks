@@ -52,13 +52,31 @@ typedef struct {
 } TokenLocation;
 TokenLocation token_location_new(Range columnRange, int line);
 
+// FLAG 2 D 237
+typedef struct { 
+    TokenLocation* array; 
+    int length; 
+} TokenLocations; 
+TokenLocations* token_locations_new(); 
+void token_locations_add(TokenLocations* arr, TokenLocation token);
+void token_locations_free(TokenLocations* arr);
+// END: DON'T MANIPULATE THIS AREA!
+
 typedef struct {
     TokenType type;
     char* lexeme;
     TokenLocation location;
 } Token;
 
-// FLAG 1
+// FLAG 1 D 162
+typedef struct { 
+    Token* array; 
+    int length; 
+} Tokens; 
+Tokens* tokens_new(); 
+void tokens_add(Tokens* arr, Token token);
+void tokens_free(Tokens* arr);
+// END: DON'T MANIPULATE THIS AREA!
 
 Token token_new(TokenType type, char* lexeme, int columnEnd, int line);
 TokenType is_ident_keyword(char* ident);
