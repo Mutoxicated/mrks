@@ -20,3 +20,10 @@ let function b be:
 print("hi ")
 
 // Comment // TOKEN
+
+/*
+multi
+line
+*/
+
+wow

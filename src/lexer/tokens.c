@@ -6,7 +6,7 @@
 #include "tokens.h"
 #include "dbg_options.h"
 
-// FLAG 2 D 739
+// FLAG 2 D 904
 TokenLocations* token_locations_new() { 
     TokenLocations* arr = malloc(sizeof(TokenLocations)); 
     TokenLocation* innerArray = NULL; 
@@ -33,12 +33,19 @@ void token_locations_free(TokenLocations* arr) {
         free(arr->array);
         arr->array = NULL;
     }
-    arr->length = 0;
+    free(arr);
     arr = NULL;
+}
+
+void token_locations_free_contents(TokenLocations* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
 }
 // END: DON'T MANIPULATE THIS AREA!
 
-// FLAG 1 D 640
 Tokens* tokens_new() { 
     Tokens* arr = malloc(sizeof(Tokens)); 
     Token* innerArray = NULL; 
@@ -62,13 +69,15 @@ void tokens_add(Tokens* arr, Token token) {
 
 void tokens_free(Tokens* arr) {
     if (arr->array != NULL) {
+        for (int i = 0; i < arr->length; i++) {
+            free(arr->array[i].lexeme);
+        }
         free(arr->array);
         arr->array = NULL;
     }
-    arr->length = 0;
+    free(arr);
     arr = NULL;
 }
-// END: DON'T MANIPULATE THIS AREA!
 
 TokenLocation token_location_new(Range columnRange, int line) {
     TokenLocation tl;
@@ -88,6 +97,10 @@ Token token_new(TokenType type, char* lexeme, int columnEnd, int line) {
 
     token.location = token_location_new(range_new(columnEnd-len, columnEnd), line);
     return token;
+}
+
+void token_free_contents(Token* t) {
+    free(t->lexeme);
 }
 
 TokenType is_ident_keyword(char* ident) {

@@ -42,6 +42,7 @@ typedef struct{
 
 NodeCore nodecore_new(Tokens* tokens);
 NodeCore nodecore_simple_new(Token token);
+void nodecore_free_contents(NodeCore* nc);
 
 /// @brief Gives the full location of the `core`, however many lines that spans
 NodeLocation nodecore_get_full_location(NodeCore* core);
@@ -94,6 +95,7 @@ struct VariableDecl {
 };
 
 VariableDecl variable_decl_new(Token t);
+void variable_decl_free_contents(VariableDecl* vd);
 
 typedef struct Stmt Stmt;
 
@@ -104,11 +106,12 @@ struct Stmt{
     StmtType type;
 };
 
-VariableDecl VarDecl(Stmt stmt);
+void stmt_free_contents(StmtType type, void* any);
 
 char* expr_to_string(Expr expr);
 char* stmt_to_string(Stmt stmt);
 
+/* The `any` parameter should be a pointer to a node statement */
 Stmt node_into_stmt(StmtType type, void* any);
 
 // FLAG 3 D 153

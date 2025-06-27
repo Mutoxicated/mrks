@@ -12,7 +12,7 @@ Range range_new(int min, int max) {
     return range;
 }
 
-// FLAG 1 D 616
+// FLAG 1 D 760
 ints* ints_new() { 
     ints* arr = malloc(sizeof(ints)); 
     int* innerArray = NULL; 
@@ -39,8 +39,16 @@ void ints_free(ints* arr) {
         free(arr->array);
         arr->array = NULL;
     }
-    arr->length = 0;
+    free(arr);
     arr = NULL;
+}
+
+void ints_free_contents(ints* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
 }
 // END: DON'T MANIPULATE THIS AREA!
 
@@ -108,7 +116,7 @@ char* strings_get_by_index(Strings* strings, int index) {
 
 void strings_free(Strings* strings) {
     free(strings->str);
-    ints_free(&strings->strStarts);
+    ints_free_contents(&strings->strStarts);
     free(strings);
     strings = NULL;
 }

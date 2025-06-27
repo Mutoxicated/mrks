@@ -71,6 +71,8 @@ typedef struct {
     TokenLocation location;
 } Token;
 
+void token_free_contents(Token* t);
+
 // FLAG 1 D 162
 typedef struct { 
     Token* array; 

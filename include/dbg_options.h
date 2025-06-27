@@ -1,6 +1,6 @@
 #ifndef DBG_OPTIONS
 #define DBG_OPTIONS
-#define MEM_DBG_ENABLED false
+#define MEM_DBG_ENABLED true
 
 
 #if MEM_DBG_ENABLED == true

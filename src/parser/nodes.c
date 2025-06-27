@@ -8,7 +8,7 @@
 #include "strbuf.h"
 #include "color.h"
 
-// FLAG 1 D 628
+// FLAG 1 D 774
 Exprs* exprs_new() { 
     Exprs* arr = malloc(sizeof(Exprs)); 
     Expr* innerArray = NULL; 
@@ -35,12 +35,20 @@ void exprs_free(Exprs* arr) {
         free(arr->array);
         arr->array = NULL;
     }
-    arr->length = 0;
+    free(arr);
     arr = NULL;
+}
+
+void exprs_free_contents(Exprs* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
 }
 // END: DON'T MANIPULATE THIS AREA!
 
-// FLAG 2 D 751
+// FLAG 2 D 918
 NodeIdentifiers* node_identifiers_new() { 
     NodeIdentifiers* arr = malloc(sizeof(NodeIdentifiers)); 
     NodeIdentifier* innerArray = NULL; 
@@ -67,12 +75,19 @@ void node_identifiers_free(NodeIdentifiers* arr) {
         free(arr->array);
         arr->array = NULL;
     }
-    arr->length = 0;
+    free(arr);
     arr = NULL;
+}
+
+void node_identifiers_free_contents(NodeIdentifiers* arr) {
+    if (arr->array != NULL) {
+        free(arr->array);
+        arr->array = NULL;
+    }
+    arr->length = 0;
 }
 // END: DON'T MANIPULATE THIS AREA!
 
-// FLAG 3 D 628
 Stmts* stmts_new() { 
     Stmts* arr = malloc(sizeof(Stmts)); 
     Stmt* innerArray = NULL; 
@@ -96,24 +111,34 @@ void stmts_add(Stmts* arr, Stmt token) {
 
 void stmts_free(Stmts* arr) {
     if (arr->array != NULL) {
+        for (int i = 0; i < arr->length; i++) {
+            stmt_free_contents(arr->array[i].type, &arr->array[i].inner);
+        }
         free(arr->array);
         arr->array = NULL;
     }
-    arr->length = 0;
+    free(arr);
     arr = NULL;
 }
-// END: DON'T MANIPULATE THIS AREA!
+
+void stmt_free_contents(StmtType type, void* any) {
+    switch (type){
+        case VariableDeclaration:
+            VariableDecl* vd = (VariableDecl*)any;
+            variable_decl_free_contents(vd);
+    }
+}
 
 Stmt node_into_stmt(StmtType type, void* any) {
     Stmt stmt = {.type = type};
     
     switch (type) {
         case VariableDeclaration:
-            stmt.inner.vd = *(VariableDecl*)(any);
+            VariableDecl* vd = (VariableDecl*)(any);
+            stmt.inner.vd = *vd;
     }
     return stmt;
 }
-
 
 char* node_location_to_str(NodeLocation* nl) {
     StrBuf _buf = strbuf_new();
@@ -193,8 +218,11 @@ NodeCore nodecore_simple_new(Token token) {
 
     return nc;
 }
+void nodecore_free_contents(NodeCore* nc) {
+    token_locations_free_contents(&nc->locations);
+}
 
-/* NODE CONSTRUCTORS */
+/* NODE CONSTRUCTORS AND DESTRUCTORS */
 VariableDecl variable_decl_new(Token t) {
     VariableDecl vd;
     vd.core = nodecore_simple_new(t);
@@ -203,4 +231,10 @@ VariableDecl variable_decl_new(Token t) {
     vd.identifiers.array = NULL;
     vd.identifiers.length = 0;
     return vd;
+}
+
+void variable_decl_free_contents(VariableDecl* vd) {
+    exprs_free_contents(&vd->expressions);
+    node_identifiers_free_contents(&vd->identifiers);
+    nodecore_free_contents(&vd->core);
 }

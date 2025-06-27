@@ -26,6 +26,7 @@ const char* compiler_action(char* filename) {
     }
     Tokens* tokens = tokens_new();
     err = Tokenize(file, tokens);
+    fclose(file);
     if (err != NULL) {
         goto exit;
     }

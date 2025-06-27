@@ -7,6 +7,7 @@ void* dbg_malloc(size_t size, char* file, int line);
 void* dbg_realloc(void* ptr, size_t size, char* file, int line);
 void dbg_free(void* ptr, char* file, int line);
 void dbg_free_meminfo();
+void dbg_write_meminfo();
 
 typedef struct{
     char* file;

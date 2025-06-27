@@ -12,12 +12,13 @@ int main(int argc, char const *argv[]) {
     }
     #if MEM_DBG_ENABLED == true
     #include "dbg_internal.h"
-    printf(BOLD_WHITE()BLUE("MEMORY ALLOCATIONS:\n")WHITE());
-    for (int i = 0; i < mem_array_length; i++) {
-        printf("->%s\n", mem_array[i].file);
-        printf("\tline: %d\n", mem_array[i].line);
-        printf("\tfreed: %s\n", mem_array[i].freed == 0 ? "false" : "true");
-    }
+    // printf(BOLD_WHITE()BLUE("MEMORY ALLOCATIONS:\n")WHITE());
+    // for (int i = 0; i < mem_array_length; i++) {
+    //     printf("->%s\n", mem_array[i].file);
+    //     printf("\tline: %d\n", mem_array[i].line);
+    //     printf("\tfreed: %s\n", mem_array[i].freed == 0 ? "false" : "true");
+    // }
+    dbg_write_meminfo();
     dbg_free_meminfo();
     #endif
     return err != NULL ? -1 : 0;
