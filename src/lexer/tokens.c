@@ -6,7 +6,7 @@
 #include "tokens.h"
 #include "dbg_options.h"
 
-// FLAG 2 D 904
+// FLAG 2 D 409
 TokenLocations* token_locations_new() { 
     TokenLocations* arr = malloc(sizeof(TokenLocations)); 
     TokenLocation* innerArray = NULL; 

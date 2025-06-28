@@ -9,6 +9,7 @@ typedef struct {
 $NAME* $LNAME##_new(); 
 void $LNAME##_add($NAME* arr, $TYPE token);
 void $LNAME##_free($NAME* arr);
+void $LNAME##_free_contents($NAME* arr);
 """
 
 [[macros]]
@@ -93,23 +94,11 @@ args = ["Expr", "Exprs", "exprs"]
 destination = "/include/nodes.h"
 flag = 1
 
-[[invocations]]
-name = "ARRAY_IMPL"
-args = ["Expr", "Exprs", "exprs"]
-destination = "/src/parser/nodes.c"
-flag = 1
-
 
 [[invocations]] 
 name = "ARRAY_DEF"
 args = ["NodeIdentifier", "NodeIdentifiers", "node_identifiers"]
 destination = "/include/nodes.h"
-flag = 2
-
-[[invocations]]
-name = "ARRAY_IMPL"
-args = ["NodeIdentifier", "NodeIdentifiers", "node_identifiers"]
-destination = "/src/parser/nodes.c"
 flag = 2
 
 

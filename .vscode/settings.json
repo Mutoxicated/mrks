@@ -21,7 +21,9 @@
         "dbg_internal.h": "c",
         "cstdlib": "c",
         "stdarg.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "tomlc17.h": "c",
+        "strbuf.h": "c"
     },
     "C_Cpp.autocomplete": "default",
     "C_Cpp.codeAnalysis.clangTidy.codeAction.formatFixes": true,

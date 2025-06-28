@@ -10,6 +10,7 @@
 #include "parser.h"
 #include "color.h"
 #include "dbg_options.h"
+#include "strbuf.h"
 
 const char* compiler_action(char* filename) {
     const char* err = NULL;
@@ -40,10 +41,14 @@ const char* compiler_action(char* filename) {
 
     Stmts* stmts = Parse(tokens);
     printf(BOLD_WHITE("--------------------------------------> Nodes:\n") WHITE());
+    StrBuf buf = strbuf_new();
     for (int i = 0; i < stmts->length; i++) {
         Stmt stmt = stmts->array[i];
-        printf("%s\n", stmt_to_string(stmt));
+        stmt_to_string(&buf, stmt);
+        printf("%s\n", buf.array);
+        strbuf_reset(&buf);
     }
+    strbuf_free_contents(&buf);
     stmts_free(stmts);
     exit:
     tokens_free(tokens);

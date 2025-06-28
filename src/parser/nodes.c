@@ -8,7 +8,6 @@
 #include "strbuf.h"
 #include "color.h"
 
-// FLAG 1 D 774
 Exprs* exprs_new() { 
     Exprs* arr = malloc(sizeof(Exprs)); 
     Expr* innerArray = NULL; 
@@ -41,14 +40,15 @@ void exprs_free(Exprs* arr) {
 
 void exprs_free_contents(Exprs* arr) {
     if (arr->array != NULL) {
+        for (int i = 0; i < arr->length; i++) {
+            expr_free_contents(arr->array[i].type, &arr->array[i].inner);
+        }
         free(arr->array);
         arr->array = NULL;
     }
     arr->length = 0;
 }
-// END: DON'T MANIPULATE THIS AREA!
 
-// FLAG 2 D 918
 NodeIdentifiers* node_identifiers_new() { 
     NodeIdentifiers* arr = malloc(sizeof(NodeIdentifiers)); 
     NodeIdentifier* innerArray = NULL; 
@@ -81,12 +81,14 @@ void node_identifiers_free(NodeIdentifiers* arr) {
 
 void node_identifiers_free_contents(NodeIdentifiers* arr) {
     if (arr->array != NULL) {
+        for (int i = 0; i < arr->length; i++) {
+            node_identifier_free_contents(&arr->array[i]);
+        }
         free(arr->array);
         arr->array = NULL;
     }
     arr->length = 0;
 }
-// END: DON'T MANIPULATE THIS AREA!
 
 Stmts* stmts_new() { 
     Stmts* arr = malloc(sizeof(Stmts)); 
@@ -121,12 +123,37 @@ void stmts_free(Stmts* arr) {
     arr = NULL;
 }
 
+void expr_free_contents(ExprType type, void* any) {
+    switch (type) {
+        case IdentifierExpression:
+            NodeIdentifier* ni = (NodeIdentifier*)any;
+            node_identifier_free_contents(ni);
+            break;
+        case LiteralExpression:
+            NodeLiteral* nl = (NodeLiteral*)any;
+            nodecore_free_contents(&nl->core);
+            break;
+    }
+}
+
 void stmt_free_contents(StmtType type, void* any) {
     switch (type){
         case VariableDeclaration:
             VariableDecl* vd = (VariableDecl*)any;
             variable_decl_free_contents(vd);
     }
+}
+
+Expr node_into_expr(ExprType type, void* any) {
+    Expr expr = {.type = type};
+
+    switch (type) {
+        case IdentifierExpression:
+            expr.inner.identifier = *(NodeIdentifier*)any;
+        case LiteralExpression:
+            expr.inner.literal = *(NodeLiteral*)any;
+    }
+    return expr;
 }
 
 Stmt node_into_stmt(StmtType type, void* any) {
@@ -140,14 +167,10 @@ Stmt node_into_stmt(StmtType type, void* any) {
     return stmt;
 }
 
-char* node_location_to_str(NodeLocation* nl) {
-    StrBuf _buf = strbuf_new();
-    StrBuf* buf = &_buf;
-    strbuf_write_string(buf, itoa(nl->columnRange.min, 10), ":", itoa(nl->lineRange.min, 10));
-
-    char* str = strbuf_get_str(buf);
-    strbuf_free(buf);
-    return str;
+void node_location_to_str(StrBuf* buf, NodeLocation* nl) {
+    itoa(buf, nl->columnRange.min, 10);
+    strbuf_write(buf, ':');
+    itoa(buf, nl->lineRange.min, 10);
 }
 
 NodeLocation nodecore_get_line_location(NodeCore* nc) {
@@ -168,34 +191,47 @@ NodeLocation nodecore_get_line_location(NodeCore* nc) {
     return nl;
 }
 
-char* expr_to_string(Expr expr) {
-    return "";
+void expr_to_string(StrBuf* buf, Expr expr) {
+    switch (expr.type) {
+        case IdentifierExpression:
+            strbuf_write_string(buf, CYAN()"Identifier: "YELLOW()"\"", expr.inner.identifier.core.token.lexeme, "\""WHITE());
+            break;
+        case LiteralExpression:
+            strbuf_write_string(buf, CYAN()"Literal: "YELLOW()"\"", expr.inner.literal.core.token.lexeme, "\""WHITE());
+            break;
+    }
 }
 
-char* stmt_to_string(Stmt stmt) {
-    StrBuf _buf = strbuf_new();
-    StrBuf* buf = &_buf;
+void stmt_to_string(StrBuf* buf, Stmt stmt) {
+    StrBuf _inner_buf = strbuf_new();
+    StrBuf* inner_buf = &_inner_buf;
 
     switch (stmt.type) {
         case VariableDeclaration:
             VariableDecl vd = stmt.inner.vd;
             NodeLocation nl = nodecore_get_line_location(&vd.core);
+
+            node_location_to_str(inner_buf, &nl);
             strbuf_write_string(buf, 
                 CYAN(), stmtStrings[(int)stmt.type], WHITE(), " ("YELLOW(), vd.core.token.lexeme, WHITE()")",
-                " at ", node_location_to_str(&nl), ":\n\t"CYAN("Expressions: \n")WHITE()
+                " at ", _inner_buf.array, ":\n\t"CYAN("Expressions: \n")WHITE()
             );
+            strbuf_reset(inner_buf);
+
             for (int i = 0; i < vd.expressions.length; i++) {
-                strbuf_write_string(buf, "\t\t", expr_to_string(vd.expressions.array[i]));
+                expr_to_string(inner_buf, vd.expressions.array[i]);
+                strbuf_write_string(buf, "\t\t", _inner_buf.array, "\n");
+                strbuf_reset(inner_buf);
             }
             strbuf_write_string(buf, CYAN()"\tIdentifiers: \n"WHITE());
             for (int i = 0; i < vd.identifiers.length; i++) {
-                strbuf_write_string(buf, "\t\t", vd.identifiers.array[i].core.token.lexeme);
+                expr_to_string(inner_buf, node_into_expr(IdentifierExpression, &vd.identifiers.array[i]));
+                strbuf_write_string(buf, "\t\t", _inner_buf.array, "\n");
+                strbuf_reset(inner_buf);
             }
             break;
     }
-    char* res = strbuf_get_str(buf);
-    strbuf_free(buf);
-    return res;
+    strbuf_free_contents(inner_buf);
 }
 
 NodeCore nodecore_new(Tokens* tokens) {
@@ -237,4 +273,21 @@ void variable_decl_free_contents(VariableDecl* vd) {
     exprs_free_contents(&vd->expressions);
     node_identifiers_free_contents(&vd->identifiers);
     nodecore_free_contents(&vd->core);
+}
+
+
+NodeIdentifier node_identifier_new(Token t) {
+    NodeIdentifier ni;
+    ni.core = nodecore_simple_new(t);
+    return ni;
+}
+
+void node_identifier_free_contents(NodeIdentifier* ni) {
+    nodecore_free_contents(&ni->core);
+}
+
+NodeLiteral node_literal_new(Token t) {
+    NodeLiteral nl;
+    nl.core = nodecore_simple_new(t);
+    return nl;
 }

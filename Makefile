@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=
 
-SRC= ./utils/toml/tomlc17.c ./utils/macro.c ./src/helpers/strbuf.c 
+SRC= ./utils/toml/tomlc17.c ./src/mem_dbg/mem_dbg.c ./utils/macro.c ./src/helpers/strbuf.c 
 OBJ=$(SRC:%.c=%.o)
 DEP=$(OBJ:%.o=%.d)
 

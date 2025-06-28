@@ -12,7 +12,7 @@ Range range_new(int min, int max) {
     return range;
 }
 
-// FLAG 1 D 760
+// FLAG 1 D 067
 ints* ints_new() { 
     ints* arr = malloc(sizeof(ints)); 
     int* innerArray = NULL; 
@@ -110,7 +110,7 @@ char* strings_get_by_index(Strings* strings, int index) {
     char* string = malloc(sizeof(*(buf.array)));
     strcpy(string, buf.array);
 
-    strbuf_free(bufptr);
+    strbuf_free_contents(bufptr);
     return string;
 }
 
@@ -133,14 +133,11 @@ void reverse(char str[], int length) {
     }
 }
 
-char* itoa(int num, int base) {
-    StrBuf buf = strbuf_new();
-    StrBuf* bufptr = &buf;
-
+char* itoa(StrBuf* buf, int num, int base) {
     bool isNegative = false;
 
     if (num == 0) {
-        strbuf_write(bufptr, '0');
+        strbuf_write(buf, '0');
         goto exit;
     }
 
@@ -154,17 +151,13 @@ char* itoa(int num, int base) {
 
     while (num != 0) {
         int rem = num % base;
-        strbuf_write(bufptr, rem > 9 ? (rem - 10) + 'a' : rem + '0');
+        strbuf_write(buf, rem > 9 ? (rem - 10) + 'a' : rem + '0');
         num = num / base;
     }
 
     if (isNegative)
-        strbuf_write(bufptr, '-');
+        strbuf_write(buf, '-');
 
     exit:
-    char* str = strbuf_get_str(bufptr);
-    reverse(str, buf.length);
-
-    strbuf_free(bufptr);
-    return str;
+    return buf->array;
 }

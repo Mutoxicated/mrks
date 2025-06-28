@@ -2,6 +2,7 @@
 #define HELPERS
 
 #include "macros.h"
+#include "strbuf.h"
 
 typedef struct{
     int min;
@@ -9,7 +10,7 @@ typedef struct{
 } Range;
 Range range_new(int min, int max);
 
-// FLAG 1 D 144
+// FLAG 1 D 081
 typedef struct { 
     int* array; 
     int length; 
@@ -17,6 +18,7 @@ typedef struct {
 ints* ints_new(); 
 void ints_add(ints* arr, int token);
 void ints_free(ints* arr);
+void ints_free_contents(ints* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
 typedef struct{
@@ -30,6 +32,6 @@ void strings_add(Strings* strings, char* str);
 char* strings_get_by_index(Strings* strings, int index);
 void strings_free(Strings* strings);
 
-char* itoa(int num, int base);
+char* itoa(StrBuf* buf, int num, int base);
 
 #endif

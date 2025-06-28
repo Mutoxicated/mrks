@@ -4,6 +4,7 @@
 #include "macros.h"
 #include "helpers.h"
 #include "tokens.h"
+#include "strbuf.h"
 
 #define FOREACH_EXPR(NODE) \
     NODE(IdentifierExpression) \
@@ -33,7 +34,7 @@ typedef struct{
     Range lineRange;
 } NodeLocation;
 
-char* node_location_to_str(NodeLocation* nl);
+void node_location_to_str(StrBuf* buf, NodeLocation* nl);
 
 typedef struct{
     Token token;
@@ -52,13 +53,15 @@ NodeLocation nodecore_get_line_location(NodeCore* core);
 typedef struct{
     NodeCore core;
 } NodeIdentifier;
+NodeIdentifier node_identifier_new(Token t);
+void node_identifier_free_contents(NodeIdentifier* ni);
 
 typedef struct{
     NodeCore core;
 } NodeLiteral;
+NodeLiteral node_literal_new(Token t);
 
 typedef struct Expr Expr;
-
 struct Expr {
     union{
         NodeIdentifier identifier;
@@ -67,7 +70,9 @@ struct Expr {
     ExprType type;
 };
 
-// FLAG 1 D 153
+void expr_free_contents(ExprType type, void* any);
+
+// FLAG 1 D 191
 typedef struct { 
     Expr* array; 
     int length; 
@@ -75,9 +80,10 @@ typedef struct {
 Exprs* exprs_new(); 
 void exprs_add(Exprs* arr, Expr token);
 void exprs_free(Exprs* arr);
+void exprs_free_contents(Exprs* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
-// FLAG 2 D 246
+// FLAG 2 D 503
 typedef struct { 
     NodeIdentifier* array; 
     int length; 
@@ -85,6 +91,7 @@ typedef struct {
 NodeIdentifiers* node_identifiers_new(); 
 void node_identifiers_add(NodeIdentifiers* arr, NodeIdentifier token);
 void node_identifiers_free(NodeIdentifiers* arr);
+void node_identifiers_free_contents(NodeIdentifiers* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
 typedef struct VariableDecl VariableDecl;
@@ -108,13 +115,15 @@ struct Stmt{
 
 void stmt_free_contents(StmtType type, void* any);
 
-char* expr_to_string(Expr expr);
-char* stmt_to_string(Stmt stmt);
+void expr_to_string(StrBuf* buf, Expr expr);
+void stmt_to_string(StrBuf* buf, Stmt stmt);
 
 /* The `any` parameter should be a pointer to a node statement */
 Stmt node_into_stmt(StmtType type, void* any);
+/* The `any` parameter should be a pointer to a node expression */
+Expr node_into_expr(ExprType type, void* any);
 
-// FLAG 3 D 153
+// FLAG 3 D 191
 typedef struct { 
     Stmt* array; 
     int length; 
@@ -122,6 +131,7 @@ typedef struct {
 Stmts* stmts_new(); 
 void stmts_add(Stmts* arr, Stmt token);
 void stmts_free(Stmts* arr);
+void stmts_free_contents(Stmts* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
 #endif

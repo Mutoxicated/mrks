@@ -156,7 +156,7 @@ const char* Tokenize(FILE* file, Tokens* tokens) {
     }
     tokens_add(tokens, token_new(Eof, "", columnEnd, line));
 
-    strbuf_free(ident_buf);
-    strbuf_free(num_buf);
+    strbuf_free_contents(ident_buf);
+    strbuf_free_contents(num_buf);
     return NULL;
 }

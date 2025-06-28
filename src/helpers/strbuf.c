@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include "strbuf.h"
 #include "string.h"
+#include "dbg_options.h"
 
 StrBuf strbuf_new() {
     StrBuf buf;
@@ -72,14 +73,8 @@ void strbuf_reset(StrBuf* buf) {
     buf->length = 0;
 }
 
-void strbuf_free(StrBuf* buf) {
+void strbuf_free_contents(StrBuf* buf) {
     free(buf->array);
     buf->array = NULL;
     buf->length = 0;
-}
-
-char* strbuf_get_str(StrBuf* buf) {
-    char* str = malloc(sizeof(char)*buf->length);
-    strcpy(str, buf->array);
-    return str;
 }

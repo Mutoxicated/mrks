@@ -1,432 +1,696 @@
-Allocation #0:
+Allocation #0 (0x55555555f890, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 50
 	Freed: true
-Allocation #1:
+	Reallocs: 0
+	TotalSize:16
+Allocation #1 (0x5555555652c0, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/helpers/strbuf.c
+	Line: 9
+	Freed: true
+	Reallocs: 26
+	TotalSize:404
+Allocation #2 (0x55555555f970, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/helpers/strbuf.c
+	Line: 9
+	Freed: true
+	Reallocs: 1
+	TotalSize:4
+Allocation #3 (0x555555560a10, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #2:
+	Reallocs: 0
+	TotalSize:3
+Allocation #4 (0x55555556dfd0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 61
 	Freed: true
-Allocation #3:
+	Reallocs: 102
+	TotalSize:171392
+Allocation #5 (0x55555555f8b0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #4:
+	Reallocs: 0
+	TotalSize:4
+Allocation #6 (0x555555560c70, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #5:
+	Reallocs: 0
+	TotalSize:1
+Allocation #7 (0x555555560df0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #6:
+	Reallocs: 0
+	TotalSize:1
+Allocation #8 (0x555555561000, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #7:
+	Reallocs: 0
+	TotalSize:3
+Allocation #9 (0x555555561200, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #8:
+	Reallocs: 0
+	TotalSize:6
+Allocation #10 (0x5555555614a0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #9:
+	Reallocs: 0
+	TotalSize:6
+Allocation #11 (0x555555561720, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #10:
+	Reallocs: 0
+	TotalSize:2
+Allocation #12 (0x555555561a50, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #11:
+	Reallocs: 0
+	TotalSize:1
+Allocation #13 (0x555555561d50, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #12:
+	Reallocs: 0
+	TotalSize:1
+Allocation #14 (0x555555562110, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #13:
+	Reallocs: 0
+	TotalSize:17
+Allocation #15 (0x555555562490, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #14:
+	Reallocs: 0
+	TotalSize:1
+Allocation #16 (0x5555555628e0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #15:
+	Reallocs: 0
+	TotalSize:1
+Allocation #17 (0x555555562ce0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #16:
+	Reallocs: 0
+	TotalSize:4
+Allocation #18 (0x5555555631c0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #17:
+	Reallocs: 0
+	TotalSize:1
+Allocation #19 (0x555555563640, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #18:
+	Reallocs: 0
+	TotalSize:1
+Allocation #20 (0x555555563bb0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #19:
+	Reallocs: 0
+	TotalSize:0
+Allocation #21 (0x5555555640b0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #20:
+	Reallocs: 0
+	TotalSize:1
+Allocation #22 (0x5555555646b0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #21:
+	Reallocs: 0
+	TotalSize:1
+Allocation #23 (0x555555564c30, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #22:
+	Reallocs: 0
+	TotalSize:5
+Allocation #24 (0x55555555f8d0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #23:
+	Reallocs: 0
+	TotalSize:26
+Allocation #25 (0x55555555f900, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #24:
+	Reallocs: 0
+	TotalSize:1
+Allocation #26 (0x555555565fd0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #25:
+	Reallocs: 0
+	TotalSize:1
+Allocation #27 (0x555555566650, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #26:
+	Reallocs: 0
+	TotalSize:15
+Allocation #28 (0x555555566e00, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #27:
+	Reallocs: 0
+	TotalSize:1
+Allocation #29 (0x555555567500, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #28:
+	Reallocs: 0
+	TotalSize:1
+Allocation #30 (0x555555567d40, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #29:
+	Reallocs: 0
+	TotalSize:8
+Allocation #31 (0x5555555684c0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #30:
+	Reallocs: 0
+	TotalSize:4
+Allocation #32 (0x555555568d90, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #31:
+	Reallocs: 0
+	TotalSize:2
+Allocation #33 (0x555555569590, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #32:
+	Reallocs: 0
+	TotalSize:5
+Allocation #34 (0x555555569180, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #33:
+	Reallocs: 0
+	TotalSize:3
+Allocation #35 (0x5555555691a0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #34:
+	Reallocs: 0
+	TotalSize:1
+Allocation #36 (0x5555555691c0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #35:
+	Reallocs: 0
+	TotalSize:8
+Allocation #37 (0x55555556a510, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #36:
+	Reallocs: 0
+	TotalSize:4
+Allocation #38 (0x55555556a4b0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #37:
+	Reallocs: 0
+	TotalSize:1
+Allocation #39 (0x55555556a4d0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #38:
+	Reallocs: 0
+	TotalSize:1
+Allocation #40 (0x55555556a4f0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #39:
+	Reallocs: 0
+	TotalSize:1
+Allocation #41 (0x555555569820, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #40:
+	Reallocs: 0
+	TotalSize:3
+Allocation #42 (0x5555555699a0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #41:
+	Reallocs: 0
+	TotalSize:1
+Allocation #43 (0x5555555699c0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #42:
+	Reallocs: 0
+	TotalSize:5
+Allocation #44 (0x5555555699e0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #43:
+	Reallocs: 0
+	TotalSize:6
+Allocation #45 (0x555555569a00, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #44:
+	Reallocs: 0
+	TotalSize:4
+Allocation #46 (0x555555569a20, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #45:
+	Reallocs: 0
+	TotalSize:4
+Allocation #47 (0x555555569a40, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #46:
+	Reallocs: 0
+	TotalSize:1
+Allocation #48 (0x555555569a60, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #47:
+	Reallocs: 0
+	TotalSize:1
+Allocation #49 (0x555555569a80, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #48:
+	Reallocs: 0
+	TotalSize:5
+Allocation #50 (0x555555560a30, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #49:
+	Reallocs: 0
+	TotalSize:25
+Allocation #51 (0x555555569aa0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #50:
+	Reallocs: 0
+	TotalSize:1
+Allocation #52 (0x555555569ac0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #51:
+	Reallocs: 0
+	TotalSize:1
+Allocation #53 (0x555555569ae0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #52:
+	Reallocs: 0
+	TotalSize:3
+Allocation #54 (0x55555556b190, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #53:
+	Reallocs: 0
+	TotalSize:8
+Allocation #55 (0x55555556b1b0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #54:
+	Reallocs: 0
+	TotalSize:1
+Allocation #56 (0x55555556b3a0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #55:
+	Reallocs: 0
+	TotalSize:1
+Allocation #57 (0x55555556b3c0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #56:
+	Reallocs: 0
+	TotalSize:3
+Allocation #58 (0x55555556be40, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #57:
+	Reallocs: 0
+	TotalSize:3
+Allocation #59 (0x55555556c550, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #58:
+	Reallocs: 0
+	TotalSize:1
+Allocation #60 (0x55555556c760, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #59:
+	Reallocs: 0
+	TotalSize:1
+Allocation #61 (0x55555556b770, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #60:
+	Reallocs: 0
+	TotalSize:1
+Allocation #62 (0x55555556b990, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #61:
+	Reallocs: 0
+	TotalSize:4
+Allocation #63 (0x55555556b9b0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #62:
+	Reallocs: 0
+	TotalSize:2
+Allocation #64 (0x55555556bbe0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #63:
+	Reallocs: 0
+	TotalSize:1
+Allocation #65 (0x55555556bc00, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #64:
+	Reallocs: 0
+	TotalSize:1
+Allocation #66 (0x55555556be60, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #65:
+	Reallocs: 0
+	TotalSize:2
+Allocation #67 (0x55555556be80, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #66:
+	Reallocs: 0
+	TotalSize:3
+Allocation #68 (0x55555556c0d0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #67:
+	Reallocs: 0
+	TotalSize:1
+Allocation #69 (0x55555556c0f0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #68:
+	Reallocs: 0
+	TotalSize:1
+Allocation #70 (0x55555556c350, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #69:
+	Reallocs: 0
+	TotalSize:1
+Allocation #71 (0x55555556c370, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #70:
+	Reallocs: 0
+	TotalSize:1
+Allocation #72 (0x55555556c390, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #71:
+	Reallocs: 0
+	TotalSize:1
+Allocation #73 (0x55555556c3b0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #72:
+	Reallocs: 0
+	TotalSize:6
+Allocation #74 (0x55555556c3d0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #73:
+	Reallocs: 0
+	TotalSize:4
+Allocation #75 (0x55555556c3f0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #74:
+	Reallocs: 0
+	TotalSize:1
+Allocation #76 (0x55555556c410, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #75:
+	Reallocs: 0
+	TotalSize:1
+Allocation #77 (0x55555556c430, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #76:
+	Reallocs: 0
+	TotalSize:6
+Allocation #78 (0x55555556c450, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #77:
+	Reallocs: 0
+	TotalSize:5
+Allocation #79 (0x55555556c470, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #78:
+	Reallocs: 0
+	TotalSize:1
+Allocation #80 (0x55555556c490, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #79:
+	Reallocs: 0
+	TotalSize:1
+Allocation #81 (0x55555556c4b0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #80:
+	Reallocs: 0
+	TotalSize:3
+Allocation #82 (0x55555556c4d0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #81:
+	Reallocs: 0
+	TotalSize:8
+Allocation #83 (0x55555556c4f0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #82:
+	Reallocs: 0
+	TotalSize:1
+Allocation #84 (0x55555556c510, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #83:
+	Reallocs: 0
+	TotalSize:2
+Allocation #85 (0x55555556c530, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #84:
+	Reallocs: 0
+	TotalSize:1
+Allocation #86 (0x55555556ca40, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #85:
+	Reallocs: 0
+	TotalSize:1
+Allocation #87 (0x55555556ca60, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #86:
+	Reallocs: 0
+	TotalSize:2
+Allocation #88 (0x55555556cd50, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #87:
+	Reallocs: 0
+	TotalSize:4
+Allocation #89 (0x55555556cd70, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #88:
+	Reallocs: 0
+	TotalSize:1
+Allocation #90 (0x55555556cd90, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #89:
+	Reallocs: 0
+	TotalSize:1
+Allocation #91 (0x55555556cdb0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #90:
+	Reallocs: 0
+	TotalSize:6
+Allocation #92 (0x55555556cdd0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #91:
+	Reallocs: 0
+	TotalSize:1
+Allocation #93 (0x55555556cdf0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #92:
+	Reallocs: 0
+	TotalSize:1
+Allocation #94 (0x55555556ce10, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #93:
+	Reallocs: 0
+	TotalSize:5
+Allocation #95 (0x55555556ce30, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #94:
+	Reallocs: 0
+	TotalSize:1
+Allocation #96 (0x55555556ce50, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #95:
+	Reallocs: 0
+	TotalSize:3
+Allocation #97 (0x55555556ce70, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #96:
+	Reallocs: 0
+	TotalSize:1
+Allocation #98 (0x55555556ce90, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #97:
+	Reallocs: 0
+	TotalSize:1
+Allocation #99 (0x55555556ceb0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #98:
+	Reallocs: 0
+	TotalSize:1
+Allocation #100 (0x55555556ced0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #99:
+	Reallocs: 0
+	TotalSize:5
+Allocation #101 (0x55555556cef0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #100:
+	Reallocs: 0
+	TotalSize:1
+Allocation #102 (0x55555556cf10, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #101:
+	Reallocs: 0
+	TotalSize:1
+Allocation #103 (0x55555556cf30, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #102:
+	Reallocs: 0
+	TotalSize:1
+Allocation #104 (0x55555556cf50, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #103:
+	Reallocs: 0
+	TotalSize:1
+Allocation #105 (0x55555556cf70, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #104:
+	Reallocs: 0
+	TotalSize:3
+Allocation #106 (0x55555556cf90, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 95
 	Freed: true
-Allocation #105:
+	Reallocs: 0
+	TotalSize:0
+Allocation #107 (0x55555555f970, 2):
 	File: /home/mutoxicated/Desktop/Software/markus/src/parser/nodes.c
-	Line: 92
+	Line: 94
 	Freed: true
-Allocation #106:
+	Reallocs: 0
+	TotalSize:16
+Allocation #108 (0x55555556cfb0, -1):
 	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
 	Line: 22
 	Freed: true
-Allocation #107:
-	File: /home/mutoxicated/Desktop/Software/markus/src/parser/nodes.c
-	Line: 103
+	Reallocs: 0
+	TotalSize:12
+Allocation #109 (0x55555556cfd0, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
+	Line: 22
 	Freed: true
+	Reallocs: 0
+	TotalSize:12
+Allocation #110 (0x555555569b00, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/parser/nodes.c
+	Line: 64
+	Freed: true
+	Reallocs: 0
+	TotalSize:48
+Allocation #111 (0x55555556d5c0, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/lexer/tokens.c
+	Line: 22
+	Freed: true
+	Reallocs: 0
+	TotalSize:12
+Allocation #112 (0x555555560e10, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/parser/nodes.c
+	Line: 23
+	Freed: true
+	Reallocs: 0
+	TotalSize:56
+Allocation #113 (0x555555561740, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/parser/nodes.c
+	Line: 105
+	Freed: true
+	Reallocs: 0
+	TotalSize:88
+Allocation #114 (0x55555555fe80, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/helpers/strbuf.c
+	Line: 9
+	Freed: true
+	Reallocs: 4
+	TotalSize:480
+Allocation #115 (0x55555555fe50, -1):
+	File: /home/mutoxicated/Desktop/Software/markus/src/helpers/strbuf.c
+	Line: 9
+	Freed: true
+	Reallocs: 5
+	TotalSize:74

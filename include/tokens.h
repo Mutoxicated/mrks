@@ -55,7 +55,7 @@ typedef struct {
 } TokenLocation;
 TokenLocation token_location_new(Range columnRange, int line);
 
-// FLAG 2 D 237
+// FLAG 2 D 492
 typedef struct { 
     TokenLocation* array; 
     int length; 
@@ -63,6 +63,7 @@ typedef struct {
 TokenLocations* token_locations_new(); 
 void token_locations_add(TokenLocations* arr, TokenLocation token);
 void token_locations_free(TokenLocations* arr);
+void token_locations_free_contents(TokenLocations* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
 typedef struct {
@@ -73,7 +74,7 @@ typedef struct {
 
 void token_free_contents(Token* t);
 
-// FLAG 1 D 162
+// FLAG 1 D 202
 typedef struct { 
     Token* array; 
     int length; 
@@ -81,6 +82,7 @@ typedef struct {
 Tokens* tokens_new(); 
 void tokens_add(Tokens* arr, Token token);
 void tokens_free(Tokens* arr);
+void tokens_free_contents(Tokens* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
 Token token_new(TokenType type, char* lexeme, int columnEnd, int line);

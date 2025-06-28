@@ -13,6 +13,9 @@ typedef struct{
     char* file;
     int line;
     bool freed;
+    int reallocs;
+    int size_total;
+    int associated_ptr;
 } DbgMemInfo;
 
 extern void** pointer_array;

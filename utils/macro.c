@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include "strbuf.h"
 #include "tomlc17.h"
+#include "dbg_options.h"
 
 #define RED "\x1b[31m"
 
@@ -21,14 +22,11 @@ void reverse(char str[], int length) {
     }
 }
 
-char* itoa(int num, int base) {
-    StrBuf buf = strbuf_new();
-    StrBuf* bufptr = &buf;
-
+char* itoa(StrBuf* buf, int num, int base) {
     bool isNegative = false;
 
     if (num == 0) {
-        strbuf_write(bufptr, '0');
+        strbuf_write(buf, '0');
         goto exit;
     }
 
@@ -42,20 +40,17 @@ char* itoa(int num, int base) {
 
     while (num != 0) {
         int rem = num % base;
-        strbuf_write(bufptr, rem > 9 ? (rem - 10) + 'a' : rem + '0');
+        strbuf_write(buf, rem > 9 ? (rem - 10) + 'a' : rem + '0');
         num = num / base;
     }
 
     if (isNegative)
-        strbuf_write(bufptr, '-');
+        strbuf_write(buf, '-');
 
     exit:
-    char* str = strbuf_get_str(bufptr);
-    reverse(str, buf.length);
-
-    strbuf_free(bufptr);
-    return str;
+    return buf->array;
 }
+
 
 static const char* path_prepend = "./src/";
 static const char* filename = "/utils/macros.toml";
@@ -89,7 +84,7 @@ int main(int argc, char const *argv[]) {
             printf(RED"Macro was not a table\n");
             goto exit;
         }
-        if (mcro.u.tab.len < 3) {
+        if (*mcro.u.tab.len < 3) {
             printf(RED"Macro must have 3 parameters.\n");
             goto exit;
         }
@@ -225,10 +220,10 @@ int main(int argc, char const *argv[]) {
             }
             strbuf_write(buf, source[j]);
         }
-        strbuf_free(macro_param_name);
+        strbuf_free_contents(macro_param_name);
 
         /* Print the buf to the location defined from destination and flag */
-        char* destination = invocation.u.tab.value[2].u.s;
+        const char* destination = invocation.u.tab.value[2].u.s;
         char full_destination[strlen(destination)+strlen(cwd)];
         strcpy(full_destination, cwd);
         strcat(full_destination, destination);
@@ -237,7 +232,7 @@ int main(int argc, char const *argv[]) {
         FILE* file = fopen(full_destination, "r+");
         if (file == NULL) {
             printf(RED"File could not be opened.\n");
-            strbuf_free(buf);
+            strbuf_free_contents(buf);
             goto exit;
         }
 
@@ -275,9 +270,9 @@ int main(int argc, char const *argv[]) {
                 if (!is_whitespace) {
                     if (flag == -1 && !isdigit(c)) {
                         printf(RED"Flag must be a number (file: %s) (got %s%c)\n", full_destination, _comment_buffer.array, c);
-                        strbuf_free(comment_buffer);
-                        strbuf_free(buf);
-                        strbuf_free(file_buffer);
+                        strbuf_free_contents(comment_buffer);
+                        strbuf_free_contents(buf);
+                        strbuf_free_contents(file_buffer);
                         goto exit;
                     }
                     strbuf_write(comment_buffer, c);
@@ -286,9 +281,9 @@ int main(int argc, char const *argv[]) {
                 if (flag == -1) {
                     if (_comment_buffer.length == 0) {
                         printf(RED"Flag must be a number (file: %s) (got nothing)\n", full_destination);
-                        strbuf_free(comment_buffer);
-                        strbuf_free(buf);
-                        strbuf_free(file_buffer);
+                        strbuf_free_contents(comment_buffer);
+                        strbuf_free_contents(buf);
+                        strbuf_free_contents(file_buffer);
                         goto exit;
                     }
                     int flg = atoi(_comment_buffer.array);
@@ -312,8 +307,12 @@ int main(int argc, char const *argv[]) {
                     continue;
                 }
                 printf("Flag %d found! Writing source instance.\n", flag);
-                strbuf_write_string(file_buffer, " FLAG ", itoa(flag, 10), " D ", itoa(_buf.length, 10));
+                strbuf_write_string(file_buffer, " FLAG ");
+                itoa(file_buffer, flag, 10);
+                strbuf_write_string(file_buffer, " D ");
+                itoa(file_buffer, _buf.length, 10);
                 strbuf_write(file_buffer, c);
+
                 strbuf_write_string(file_buffer, _buf.array);
                 if (!flag_update) {
                     strbuf_write_string(file_buffer, "// END: DON'T MANIPULATE THIS AREA!\n");
@@ -367,9 +366,9 @@ int main(int argc, char const *argv[]) {
         fputs(_file_buffer.array, file);
         ftruncate(fileno(file), _file_buffer.length);
         fclose(file);
-        strbuf_free(comment_buffer);
-        strbuf_free(buf);
-        strbuf_free(file_buffer);
+        strbuf_free_contents(comment_buffer);
+        strbuf_free_contents(buf);
+        strbuf_free_contents(file_buffer);
         if (i != invocations.u.arr.size-1) {
             printf("\n");
         }
@@ -377,5 +376,10 @@ int main(int argc, char const *argv[]) {
     printf("\n*** Successfully expanded all macro invocations! ***\n");
     exit:
     toml_free(result);
+
+    #if MEM_DBG_ENABLED 
+    dbg_free_meminfo();
+    dbg_write_meminfo();
+    #endif
     return 0;
 }   
