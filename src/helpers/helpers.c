@@ -12,9 +12,9 @@ Range range_new(int min, int max) {
     return range;
 }
 
-// FLAG 1 D 067
+// FLAG 1 D 779
 ints* ints_new() { 
-    ints* arr = malloc(sizeof(ints)); 
+    ints* arr = (ints*)malloc(sizeof(ints)); 
     int* innerArray = NULL; 
     arr->array = innerArray; 
     arr->length = 0; 
@@ -25,12 +25,12 @@ ints* ints_new() {
 void ints_add(ints* arr, int token) { 
     arr->length++; 
     if (arr->array == NULL) { 
-        arr->array = malloc(sizeof(int)); 
+        arr->array = (int*)malloc(sizeof(int)); 
         arr->array[0] = token;
  
         return; 
     } 
-    arr->array = realloc(arr->array, sizeof(int)*arr->length); 
+    arr->array = (int*)realloc(arr->array, sizeof(int)*arr->length); 
     arr->array[arr->length-1] = token; 
 } 
 
@@ -53,9 +53,9 @@ void ints_free_contents(ints* arr) {
 // END: DON'T MANIPULATE THIS AREA!
 
 Strings* strings_new(char* str) {
-    Strings* strings = malloc(sizeof(Strings));
+    Strings* strings = (Strings*)malloc(sizeof(Strings));
     int len = strlen(str);
-    strings->str = malloc(sizeof(char)*len);
+    strings->str = (char*)malloc(sizeof(char)*len);
     strcpy(strings->str, str);
     strings->length = 1;
     strings->strStarts.array = NULL;
@@ -68,7 +68,7 @@ Strings* strings_new(char* str) {
 
 void strings_add(Strings* strings, char* str) {
     strings->strLen += sizeof(str);
-    strings->str = realloc(strings->str, strings->strLen+1);
+    strings->str = (char*)realloc(strings->str, strings->strLen+1);
     
     int currentStrIndex = 0;
     int index = 0;
@@ -107,7 +107,7 @@ char* strings_get_by_index(Strings* strings, int index) {
         i++;
     }
 
-    char* string = malloc(sizeof(*(buf.array)));
+    char* string = (char*)malloc(sizeof(*(buf.array)));
     strcpy(string, buf.array);
 
     strbuf_free_contents(bufptr);
@@ -157,7 +157,8 @@ char* itoa(StrBuf* buf, int num, int base) {
 
     if (isNegative)
         strbuf_write(buf, '-');
-
+    
+    reverse(buf->array, buf->length);
     exit:
     return buf->array;
 }

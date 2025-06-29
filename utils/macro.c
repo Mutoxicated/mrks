@@ -47,6 +47,7 @@ char* itoa(StrBuf* buf, int num, int base) {
     if (isNegative)
         strbuf_write(buf, '-');
 
+    reverse(buf->array, buf->length);
     exit:
     return buf->array;
 }
@@ -306,11 +307,18 @@ int main(int argc, char const *argv[]) {
                 if (c != '\n') {
                     continue;
                 }
-                printf("Flag %d found! Writing source instance.\n", flag);
+                printf("Flag %d found! Flag update jump: %d. Writing source instance.\n", flag, flag_update_char_jump);
                 strbuf_write_string(file_buffer, " FLAG ");
-                itoa(file_buffer, flag, 10);
-                strbuf_write_string(file_buffer, " D ");
-                itoa(file_buffer, _buf.length, 10);
+                StrBuf num = strbuf_new();
+                itoa(&num, flag, 10);
+                strbuf_write_string(file_buffer, num.array, " D ");
+                strbuf_reset(&num);
+                if (flag_update_char_jump == -1) {
+                    printf("Buf length: %d\n", _buf.length);
+                }
+                itoa(&num, _buf.length, 10);
+                strbuf_write_string(file_buffer, num.array);
+                strbuf_free_contents(&num);
                 strbuf_write(file_buffer, c);
 
                 strbuf_write_string(file_buffer, _buf.array);
