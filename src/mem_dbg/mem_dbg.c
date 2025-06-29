@@ -29,17 +29,17 @@ void* dbg_malloc(size_t size, char* file, int line) {
     }
     pointer_array_length++;
     if (pointer_array == NULL) {
-        pointer_array = malloc(sizeof(void*));
+        pointer_array = (void**)malloc(sizeof(void*));
     }else {
-        pointer_array = realloc(pointer_array, sizeof(void*)*pointer_array_length);
+        pointer_array = (void**)realloc(pointer_array, sizeof(void*)*pointer_array_length);
     }
     pointer_array[pointer_array_length-1] = ptr;
 
     mem_array_length++;
     if (mem_array == NULL) {
-        mem_array = malloc(sizeof (DbgMemInfo));
+        mem_array = (DbgMemInfo*)malloc(sizeof (DbgMemInfo));
     }else {
-        mem_array = realloc(mem_array, sizeof (DbgMemInfo)*mem_array_length);
+        mem_array = (DbgMemInfo*)realloc(mem_array, sizeof (DbgMemInfo)*mem_array_length);
     }
     DbgMemInfo info;
     info.file = file;
@@ -75,7 +75,7 @@ void dbg_free(void* ptr, char* file, int line) {
     for (int i = pointer_array_length-1; i >= 0; i--) {
         if (pointer_array[i] == ptr) {
             if (mem_array[i].freed) {
-                printf(BOLD_WHITE()RED()"DOUBLE FREE DETECTED\n"WHITE());
+                printf(BOLD_WHITE()RED()"DOUBLE FREE DETECTED\n" WHITE());
                 exit(-1);
             }
             mem_array[i].freed = true;

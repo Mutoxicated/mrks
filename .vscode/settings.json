@@ -30,6 +30,6 @@
     "C_Cpp.codeAnalysis.runAutomatically": true,
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
-    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.cStandard": "c99"
 }

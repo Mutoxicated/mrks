@@ -4,13 +4,25 @@ CFLAGS=
 SRC= ./utils/toml/tomlc17.c ./src/mem_dbg/mem_dbg.c ./utils/macro.c ./src/helpers/strbuf.c 
 OBJ=$(SRC:%.c=%.o)
 DEP=$(OBJ:%.o=%.d)
-
 EXE=./utils/utils.exe
 
 TARGET=/usr/local
 
-all: debug
+DLLSRC= ./src/lexer/lexer.c ./src/lexer/tokens.c ./src/helpers/helpers.c ./src/helpers/strbuf.c ./src/mem_dbg/mem_dbg.c 
+DLLOBJ= $(DLLSRC:%.c=%.o)
+THEDLL= /usr/lib/liblexer.so
+
+macro: debug
 	./utils/utils.exe verbose
+
+dll: $(DLLOBJ) 
+dll: DLL
+.NOTPARALLEL: dll
+
+DLL: $(THEDLL)
+
+$(THEDLL): $(DLLOBJ)
+	$(CC) -shared -o $(THEDLL) $^ -I ./include
 
 debug: CFLAGS += -g
 debug: $(EXE)
@@ -34,4 +46,4 @@ $(EXE): $(OBJ)
 -include $(DEP)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $< -I ./include
+	$(CC) $(CFLAGS) -c -o $@ $< -I ./include 

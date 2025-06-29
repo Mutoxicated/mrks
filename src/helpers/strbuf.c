@@ -6,7 +6,7 @@
 
 StrBuf strbuf_new() {
     StrBuf buf;
-    buf.array = malloc(sizeof(char));
+    buf.array = (char*)malloc(sizeof(char));
     buf.array[0] = '\0';
     buf.length = 0;
     buf.cap = 1;
@@ -15,7 +15,7 @@ StrBuf strbuf_new() {
 
 StrBuf strbuf_new_cap(int cap) {
     StrBuf buf;
-    buf.array = malloc(sizeof(char)*(cap+1));
+    buf.array = (char*)malloc(sizeof(char)*(cap+1));
     buf.array[0] = '\0';
     buf.length = 0;
     buf.cap = cap;
@@ -26,7 +26,7 @@ void strbuf_write(StrBuf* buf, char c) {
     buf->length++;
     if (buf->length > buf->cap-1) {
         buf->cap++;
-        buf->array = realloc(buf->array, sizeof(char)*(buf->cap+1));
+        buf->array = (char*)realloc(buf->array, sizeof(char)*(buf->cap+1));
     }
     buf->array[buf->length-1] = c;
     buf->array[buf->length] = '\0';
@@ -49,7 +49,7 @@ void _strbuf_write_string(StrBuf* buf, ...) {
     buf->length += strLen;
     if (buf->length > buf->cap-1) {
         buf->cap = buf->length+1;
-        buf->array = realloc(buf->array, sizeof(char)*(buf->cap+1));
+        buf->array = (char*)realloc(buf->array, sizeof(char)*(buf->cap+1));
     }
 
     va_start(args, buf);

@@ -17,7 +17,7 @@ name = "ARRAY_IMPL"
 params = ["TYPE", "NAME", "LNAME"]
 source = """
 $NAME* $LNAME##_new() { 
-    $NAME* arr = malloc(sizeof($NAME)); 
+    $NAME* arr = ($NAME*)malloc(sizeof($NAME)); 
     $TYPE* innerArray = NULL; 
     arr->array = innerArray; 
     arr->length = 0; 
@@ -28,12 +28,12 @@ $NAME* $LNAME##_new() {
 void $LNAME##_add($NAME* arr, $TYPE token) { 
     arr->length++; 
     if (arr->array == NULL) { 
-        arr->array = malloc(sizeof($TYPE)); 
+        arr->array = ($TYPE*)malloc(sizeof($TYPE)); 
         arr->array[0] = token;
  
         return; 
     } 
-    arr->array = realloc(arr->array, sizeof($TYPE)*arr->length); 
+    arr->array = ($TYPE*)realloc(arr->array, sizeof($TYPE)*arr->length); 
     arr->array[arr->length-1] = token; 
 } 
 

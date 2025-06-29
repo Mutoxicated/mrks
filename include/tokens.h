@@ -29,6 +29,8 @@
         TOKEN(Asterisk) \
         TOKEN(Caret) \
         \
+        TOKEN(Newline) \
+        TOKEN(Identation) \
         TOKEN(Eof) \
         TOKEN(Invalid) \
 
@@ -55,7 +57,7 @@ typedef struct {
 } TokenLocation;
 TokenLocation token_location_new(Range columnRange, int line);
 
-// FLAG 2 D 492
+// FLAG 2 D 294
 typedef struct { 
     TokenLocation* array; 
     int length; 
@@ -66,11 +68,12 @@ void token_locations_free(TokenLocations* arr);
 void token_locations_free_contents(TokenLocations* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
-typedef struct {
+typedef struct Token Token;
+struct Token {
     TokenType type;
     char* lexeme;
     TokenLocation location;
-} Token;
+};
 
 void token_free_contents(Token* t);
 

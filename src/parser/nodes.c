@@ -9,7 +9,7 @@
 #include "color.h"
 
 Exprs* exprs_new() { 
-    Exprs* arr = malloc(sizeof(Exprs)); 
+    Exprs* arr = (Exprs*)malloc(sizeof(Exprs)); 
     Expr* innerArray = NULL; 
     arr->array = innerArray; 
     arr->length = 0; 
@@ -20,12 +20,12 @@ Exprs* exprs_new() {
 void exprs_add(Exprs* arr, Expr token) { 
     arr->length++; 
     if (arr->array == NULL) { 
-        arr->array = malloc(sizeof(Expr)); 
+        arr->array = (Expr*)malloc(sizeof(Expr)); 
         arr->array[0] = token;
  
         return; 
     } 
-    arr->array = realloc(arr->array, sizeof(Expr)*arr->length); 
+    arr->array = (Expr*)realloc(arr->array, sizeof(Expr)*arr->length); 
     arr->array[arr->length-1] = token; 
 } 
 
@@ -50,7 +50,7 @@ void exprs_free_contents(Exprs* arr) {
 }
 
 NodeIdentifiers* node_identifiers_new() { 
-    NodeIdentifiers* arr = malloc(sizeof(NodeIdentifiers)); 
+    NodeIdentifiers* arr = (NodeIdentifiers*)malloc(sizeof(NodeIdentifiers)); 
     NodeIdentifier* innerArray = NULL; 
     arr->array = innerArray; 
     arr->length = 0; 
@@ -61,12 +61,12 @@ NodeIdentifiers* node_identifiers_new() {
 void node_identifiers_add(NodeIdentifiers* arr, NodeIdentifier token) { 
     arr->length++; 
     if (arr->array == NULL) { 
-        arr->array = malloc(sizeof(NodeIdentifier)); 
+        arr->array = (NodeIdentifier*)malloc(sizeof(NodeIdentifier)); 
         arr->array[0] = token;
  
         return; 
     } 
-    arr->array = realloc(arr->array, sizeof(NodeIdentifier)*arr->length); 
+    arr->array = (NodeIdentifier*)realloc(arr->array, sizeof(NodeIdentifier)*arr->length); 
     arr->array[arr->length-1] = token; 
 } 
 
@@ -91,7 +91,7 @@ void node_identifiers_free_contents(NodeIdentifiers* arr) {
 }
 
 Stmts* stmts_new() { 
-    Stmts* arr = malloc(sizeof(Stmts)); 
+    Stmts* arr = (Stmts*)malloc(sizeof(Stmts)); 
     Stmt* innerArray = NULL; 
     arr->array = innerArray; 
     arr->length = 0; 
@@ -102,12 +102,12 @@ Stmts* stmts_new() {
 void stmts_add(Stmts* arr, Stmt token) { 
     arr->length++; 
     if (arr->array == NULL) { 
-        arr->array = malloc(sizeof(Stmt)); 
+        arr->array = (Stmt*)malloc(sizeof(Stmt)); 
         arr->array[0] = token;
  
         return; 
     } 
-    arr->array = realloc(arr->array, sizeof(Stmt)*arr->length); 
+    arr->array = (Stmt*)realloc(arr->array, sizeof(Stmt)*arr->length); 
     arr->array[arr->length-1] = token; 
 } 
 
@@ -126,9 +126,11 @@ void stmts_free(Stmts* arr) {
 void expr_free_contents(ExprType type, void* any) {
     switch (type) {
         case IdentifierExpression:
-            NodeIdentifier* ni = (NodeIdentifier*)any;
-            node_identifier_free_contents(ni);
-            break;
+            {
+                NodeIdentifier* ni = (NodeIdentifier*)any;
+                node_identifier_free_contents(ni);
+                break;
+            }
         case LiteralExpression:
             NodeLiteral* nl = (NodeLiteral*)any;
             nodecore_free_contents(&nl->core);
@@ -194,10 +196,10 @@ NodeLocation nodecore_get_line_location(NodeCore* nc) {
 void expr_to_string(StrBuf* buf, Expr expr) {
     switch (expr.type) {
         case IdentifierExpression:
-            strbuf_write_string(buf, CYAN()"Identifier: "YELLOW()"\"", expr.inner.identifier.core.token.lexeme, "\""WHITE());
+            strbuf_write_string(buf, CYAN()"Identifier: " YELLOW()"\"", expr.inner.identifier.core.token.lexeme, "\"" WHITE());
             break;
         case LiteralExpression:
-            strbuf_write_string(buf, CYAN()"Literal: "YELLOW()"\"", expr.inner.literal.core.token.lexeme, "\""WHITE());
+            strbuf_write_string(buf, CYAN()"Literal: " YELLOW()"\"", expr.inner.literal.core.token.lexeme, "\"" WHITE());
             break;
     }
 }
@@ -213,8 +215,8 @@ void stmt_to_string(StrBuf* buf, Stmt stmt) {
 
             node_location_to_str(inner_buf, &nl);
             strbuf_write_string(buf, 
-                CYAN(), stmtStrings[(int)stmt.type], WHITE(), " ("YELLOW(), vd.core.token.lexeme, WHITE()")",
-                " at ", _inner_buf.array, ":\n\t"CYAN("Expressions: \n")WHITE()
+                CYAN(), stmtStrings[(int)stmt.type], WHITE(), " (" YELLOW(), vd.core.token.lexeme, WHITE()")",
+                " at ", _inner_buf.array, ":\n\t" CYAN("Expressions: \n")WHITE()
             );
             strbuf_reset(inner_buf);
 
@@ -223,7 +225,7 @@ void stmt_to_string(StrBuf* buf, Stmt stmt) {
                 strbuf_write_string(buf, "\t\t", _inner_buf.array, "\n");
                 strbuf_reset(inner_buf);
             }
-            strbuf_write_string(buf, CYAN()"\tIdentifiers: \n"WHITE());
+            strbuf_write_string(buf, CYAN()"\tIdentifiers: \n" WHITE());
             for (int i = 0; i < vd.identifiers.length; i++) {
                 expr_to_string(inner_buf, node_into_expr(IdentifierExpression, &vd.identifiers.array[i]));
                 strbuf_write_string(buf, "\t\t", _inner_buf.array, "\n");

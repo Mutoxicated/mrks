@@ -4,6 +4,6 @@
 #include "tokens.h"
 #include <stdio.h>
 
-const char* Tokenize(FILE* file, Tokens* token);
+void Tokenize(char* src, Tokens* tokens);
 
 #endif

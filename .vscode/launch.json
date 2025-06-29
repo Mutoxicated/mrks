@@ -53,6 +53,14 @@
                 "miDebuggerPath": "gdb.exe",
                 "program": "${workspaceFolder}/output/main.exe"
             },
+        },
+        {
+            "name": "Debug Rust",
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceRoot}/lsp/target/debug/lsp",
         }
     ]
 }

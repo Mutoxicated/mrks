@@ -83,7 +83,7 @@ void exprs_free(Exprs* arr);
 void exprs_free_contents(Exprs* arr);
 // END: DON'T MANIPULATE THIS AREA!
 
-// FLAG 2 D 503
+// FLAG 2 D 305
 typedef struct { 
     NodeIdentifier* array; 
     int length; 
@@ -105,7 +105,6 @@ VariableDecl variable_decl_new(Token t);
 void variable_decl_free_contents(VariableDecl* vd);
 
 typedef struct Stmt Stmt;
-
 struct Stmt{
     union{
         VariableDecl vd;

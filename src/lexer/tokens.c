@@ -6,9 +6,9 @@
 #include "tokens.h"
 #include "dbg_options.h"
 
-// FLAG 2 D 409
+// FLAG 2 D 953
 TokenLocations* token_locations_new() { 
-    TokenLocations* arr = malloc(sizeof(TokenLocations)); 
+    TokenLocations* arr = (TokenLocations*)malloc(sizeof(TokenLocations)); 
     TokenLocation* innerArray = NULL; 
     arr->array = innerArray; 
     arr->length = 0; 
@@ -19,12 +19,12 @@ TokenLocations* token_locations_new() {
 void token_locations_add(TokenLocations* arr, TokenLocation token) { 
     arr->length++; 
     if (arr->array == NULL) { 
-        arr->array = malloc(sizeof(TokenLocation)); 
+        arr->array = (TokenLocation*)malloc(sizeof(TokenLocation)); 
         arr->array[0] = token;
  
         return; 
     } 
-    arr->array = realloc(arr->array, sizeof(TokenLocation)*arr->length); 
+    arr->array = (TokenLocation*)realloc(arr->array, sizeof(TokenLocation)*arr->length); 
     arr->array[arr->length-1] = token; 
 } 
 
@@ -47,7 +47,7 @@ void token_locations_free_contents(TokenLocations* arr) {
 // END: DON'T MANIPULATE THIS AREA!
 
 Tokens* tokens_new() { 
-    Tokens* arr = malloc(sizeof(Tokens)); 
+    Tokens* arr = (Tokens*)malloc(sizeof(Tokens)); 
     Token* innerArray = NULL; 
     arr->array = innerArray; 
     arr->length = 0; 
@@ -58,12 +58,12 @@ Tokens* tokens_new() {
 void tokens_add(Tokens* arr, Token token) { 
     arr->length++; 
     if (arr->array == NULL) { 
-        arr->array = malloc(sizeof(Token)); 
+        arr->array = (Token*)malloc(sizeof(Token)); 
         arr->array[0] = token;
  
         return; 
     } 
-    arr->array = realloc(arr->array, sizeof(Token)*arr->length); 
+    arr->array = (Token*)realloc(arr->array, sizeof(Token)*arr->length); 
     arr->array[arr->length-1] = token; 
 } 
 
@@ -92,10 +92,10 @@ Token token_new(TokenType type, char* lexeme, int columnEnd, int line) {
     Token token;
     token.type = type;
 
-    token.lexeme = malloc(sizeof(char)*len);
+    token.lexeme = (char*)malloc(sizeof(char)*len);
     strcpy(token.lexeme, lexeme);
 
-    token.location = token_location_new(range_new(columnEnd-len, columnEnd), line);
+    token.location = token_location_new(strcmp(lexeme, "(newline)") == 0 || strcmp(lexeme, "(tab)") == 0 ? range_new(columnEnd-1, columnEnd) : range_new(columnEnd-len, columnEnd), line);
     return token;
 }
 

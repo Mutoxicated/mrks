@@ -26,8 +26,18 @@ const char* compiler_action(char* filename) {
         return "Couldn't open the file.";
     }
     Tokens* tokens = tokens_new();
-    err = Tokenize(file, tokens);
+    Stmts* stmts;
+    StrBuf buf;
+
+    char* file_contents;
+    fseek(file, 0L, SEEK_END);
+    int length = ftell(file);
+    fseek(file, 0L, SEEK_SET);
+    file_contents = (char*)malloc(length*sizeof (char));
+    fread(file_contents, 1, length, file);
     fclose(file);
+    Tokenize(file_contents, tokens);
+    free(file_contents);
     if (err != NULL) {
         goto exit;
     }
@@ -39,9 +49,9 @@ const char* compiler_action(char* filename) {
     }
     printf(WHITE());
 
-    Stmts* stmts = Parse(tokens);
+    stmts = Parse(tokens);
     printf(BOLD_WHITE("--------------------------------------> Nodes:\n") WHITE());
-    StrBuf buf = strbuf_new();
+    buf = strbuf_new();
     for (int i = 0; i < stmts->length; i++) {
         Stmt stmt = stmts->array[i];
         stmt_to_string(&buf, stmt);
