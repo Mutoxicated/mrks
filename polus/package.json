@@ -1,0 +1,29 @@
+{
+  "name": "polus",
+  "description": "A Language Server implementation for the Markus Programming Language",
+  "author": "mutoxicated",
+  "license": "MIT",
+  "version": "1.0.0",
+  "publisher": "mutoxicated",
+  "categories": [],
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "activationEvents": [
+    "onLanguage"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {}
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0",
+    "vscode-languageserver": "^8.1.0",
+    "vscode-languageserver-textdocument": "^1.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.7",
+    "typescript": "^5.2.2",
+    "@types/vscode": "^1.81.0"
+  }
+}

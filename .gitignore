@@ -3,3 +3,5 @@ target/
 *.o
 *.exe
 mem_dbg_info.txt
+node_modules/
+*.vsix

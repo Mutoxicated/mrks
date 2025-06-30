@@ -15,7 +15,7 @@
 #define false 0
 #define true 1
 
-void Tokenize(char* src, Tokens* tokens) {    
+void Tokenize(char* src, Tokens* tokens) { 
     int line = 1;
     int columnEnd = 0;
     StrBuf _ident_buf = strbuf_new();
@@ -31,7 +31,19 @@ void Tokenize(char* src, Tokens* tokens) {
     int len = strlen(src)-1;
     while (true) {
         index++;
-        if (index >= len) {
+        if (index > len) {
+            if (strcmp(_ident_buf.array, "") != 0) {
+                Token token = token_new(Identifier, _ident_buf.array, columnEnd, line);
+                TokenType tt = is_ident_keyword(token.lexeme);
+                if (tt != Invalid) {
+                    token.type = tt;
+                }
+                tokens_add(tokens, token);
+                strbuf_reset(ident_buf);
+            }else if (strcmp(_num_buf.array, "") != 0) {
+                tokens_add(tokens, token_new(Number, _num_buf.array, columnEnd, line));
+                strbuf_reset(num_buf);
+            }
             break;
         }
         o = src[index];

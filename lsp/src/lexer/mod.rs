@@ -7,10 +7,12 @@ unsafe extern "C" {
 
 pub fn Tokenize_S(file: &str, tokens: *mut tokens::Tokens) {
     let bytes = file.as_bytes();
-    let mut ibytes:Vec<i8> = Vec::new();
-    ibytes.reserve_exact(bytes.len());
+    let mut ibytes:Vec<libc::c_char> = Vec::new();
     for v in bytes {
         ibytes.push(*v as i8);
+    }
+    if ibytes.len() == 0 {
+        ibytes.push('\0' as i8);
     }
     unsafe {
         Tokenize(ibytes.as_ptr(), tokens);

@@ -1,21 +1,23 @@
-use std::{io::{Read, Write}, net::{TcpListener, TcpStream}, ptr::null_mut};
+use std::{io::{BufRead, BufReader, Read, Write}, net::{TcpListener, TcpStream}, ptr::null_mut, str::from_utf8};
 use crate::lexer::{self, tokens::Tokens, tokens::Token};
 
 fn handle_client(mut stream:TcpStream) {
-    let mut string = String::new();
-    stream.read_to_string(&mut string).expect("Failed to read stream to string");
+    let mut bytes:[u8; 1024] = [0; 1024];
+    stream.read(&mut bytes).expect("Failed to read bytes from stream");
+    let a = String::from_utf8_lossy(&bytes);
+    let string = a.trim().chars().as_str();
     let mut tokens = Tokens{
-        array: null_mut(),
+        array: null_mut() as *mut Token,
         length: 0
     };
-    lexer::Tokenize_S(string.as_str(), &mut tokens);
+    lexer::Tokenize_S(string, &mut tokens);
     let mut string_sendout = String::new();// YYYYYYYYYY|xx-xx:x
     string_sendout.reserve_exact(18*tokens.length.unsigned_abs() as usize);
     unsafe {
         for i in 0..tokens.length {
             let token = tokens.array.offset(i as isize) as *mut Token;
             string_sendout.push_str(
-                format!("{}-{}:{}|{:?}", 
+                format!("{}-{}:{}|{:?}\n", 
                 (*token).location.column_range.min, 
                 (*token).location.column_range.max,
                 (*token).location.line,
@@ -23,7 +25,9 @@ fn handle_client(mut stream:TcpStream) {
             );
         }
     }
-    stream.write_all(string_sendout.as_bytes()).expect("Failed to write tokens output data");
+    println!("String: {}", string_sendout);
+    let _ = stream.write_all(string_sendout.as_bytes());
+    //stream.write_all(string_sendout.as_bytes()).expect("Failed to write tokens output data");
 }
 
 pub fn run() {
@@ -31,12 +35,13 @@ pub fn run() {
     if let Err(x) = res {
         panic!("Bind error: {x}");
     }
-    println!("Binded to localhost:3030");
+    println!("Binded to localhost:30000");
     let listener = res.unwrap();
     for res in listener.incoming() {
         match res {
             Ok(stream) => {
-                std::thread::spawn(|| handle_client(stream));
+                println!("Got stream.");
+                std::thread::spawn(|| { handle_client(stream) });
             }
             Err(x) => {
                 panic!("Failed to establish connection: {x}");

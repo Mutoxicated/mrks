@@ -11,11 +11,11 @@ let global rubric be:
 // returns: bool
 // desc: Blahblahblah
 let function a be:
-	if num == 0:
+	if num == 0: 
 		return true
-	
+	ASDA
 	return false
-
+ASDASD
 let function b be:
 	if true:
 		return

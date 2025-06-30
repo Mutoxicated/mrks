@@ -61,6 +61,20 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "program": "${workspaceRoot}/lsp/target/debug/lsp",
-        }
+        },
+        {
+            "name": "Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/polus"
+            ]
+        },
+		{
+			"name": "Attach To Server",
+			"type": "node",
+			"request": "attach",
+			"processId": "${command:PickProcess}"
+		}
     ]
 }
