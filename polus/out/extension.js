@@ -6,22 +6,12 @@ const node_1 = require("vscode-languageclient/node");
 const net = require("net");
 // Connect to the LSP
 var lsp = new net.Socket();
-lsp.connect(30000, '127.0.0.1', function () {
-    console.log('Connected');
-});
-var lspReceivedData = "";
-function onData(data) {
-    console.log('Received: ' + data);
-    lspReceivedData = data.toString();
-}
 let textdocs;
 let docSelector = { language: '*' };
 let client;
 function activate(context) {
     let serverOptions = () => {
-        var socket = lsp.connect(30000, '127.0.0.1', function () {
-            console.log('Connected');
-        });
+        var socket = lsp.connect(30000, '127.0.0.1');
         let result = {
             writer: socket,
             reader: socket,
@@ -35,6 +25,7 @@ function activate(context) {
         },
     };
     client = new node_1.LanguageClient("polus", serverOptions, clientOptions);
+    client.start();
 }
 exports.activate = activate;
 function deactivate() {

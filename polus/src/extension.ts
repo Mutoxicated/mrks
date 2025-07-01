@@ -10,23 +10,13 @@ import * as net from "net"
 
 // Connect to the LSP
 var lsp = new net.Socket();
-lsp.connect(30000, '127.0.0.1', function () {
-  console.log('Connected');
-});
-var lspReceivedData = "";
-function onData(data: Buffer) {
-  console.log('Received: ' + data);
-  lspReceivedData = data.toString();
-}
 
 let textdocs: vscode.TextDocument[]
 let docSelector = { language: '*' }
 let client: LanguageClient;
 export function activate(context: ExtensionContext) {
 	let serverOptions = () => {
-		var socket = lsp.connect(30000, '127.0.0.1', function () {
-			console.log('Connected');
-		});
+		var socket = lsp.connect(30000, '127.0.0.1');
 		let result:StreamInfo = {
 			writer: socket,
 			reader: socket,
@@ -42,6 +32,8 @@ export function activate(context: ExtensionContext) {
 	};
 
 	client = new LanguageClient("polus", serverOptions, clientOptions);
+
+	client.start()
 }
 
 export function deactivate(): Thenable<void> | undefined {

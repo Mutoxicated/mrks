@@ -43,7 +43,10 @@ fn main() {
         }
     }
 
-    println!("Test passed! Starting tcp connection...");
+    println!("Test passed! Starting udp connection at {}...", ADDRESS!());
     
-    server::run();
+    let res = server::run();
+    if let Err(x) = res {
+        println!("Error! {x}");
+    }
 }
