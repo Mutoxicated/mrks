@@ -1,5 +1,5 @@
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TokenType {
     Rubric, Global, Let, Be, Function, If, Identifier, Str, Number, OpenParen, CloseParen, Dot, Comma, Dollar, Colon, Semicolon, Equal, Less, Greater, Plus, Dash, Slash, Asterisk, Caret, Newline, Identation, Eof, Invalid
 }

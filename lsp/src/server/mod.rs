@@ -1,5 +1,5 @@
-use std::{io::{BufRead, BufReader, Read, Write}, net::{TcpListener, TcpStream}, ptr::null_mut, str::from_utf8};
-use crate::lexer::{self, tokens::Tokens, tokens::Token};
+use std::{io::{Read, Write}, net::{TcpListener, TcpStream}, ptr::null_mut, str::from_utf8};
+use crate::lexer::{self, tokens::{Token, TokenType, Tokens}};
 
 fn handle_client(mut stream:TcpStream) {
     let mut bytes:[u8; 1024] = [0; 1024];
@@ -16,6 +16,9 @@ fn handle_client(mut stream:TcpStream) {
     unsafe {
         for i in 0..tokens.length {
             let token = tokens.array.offset(i as isize) as *mut Token;
+            if (*token).r#type == TokenType::Eof || (*token).r#type == TokenType::Newline || (*token).r#type == TokenType::Identation {
+                continue;
+            }
             string_sendout.push_str(
                 format!("{}-{}:{}|{:?}\n", 
                 (*token).location.column_range.min, 

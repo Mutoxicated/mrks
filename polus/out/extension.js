@@ -1,36 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
-const path = require("path");
 const vscode_1 = require("vscode");
 const node_1 = require("vscode-languageclient/node");
+const net = require("net");
+// Connect to the LSP
+var lsp = new net.Socket();
+lsp.connect(30000, '127.0.0.1', function () {
+    console.log('Connected');
+});
+var lspReceivedData = "";
+function onData(data) {
+    console.log('Received: ' + data);
+    lspReceivedData = data.toString();
+}
+let textdocs;
+let docSelector = { language: '*' };
 let client;
 function activate(context) {
-    console.log("ACTIVATE");
-    // The server is implemented in node
-    const serverModule = context.asAbsolutePath(path.join("out", "server.js"));
-    // If the extension is launched in debug mode then the debug server options are used
-    // Otherwise the run options are used
-    const serverOptions = {
-        run: { module: serverModule, transport: node_1.TransportKind.ipc },
-        debug: {
-            module: serverModule,
-            transport: node_1.TransportKind.ipc,
-        },
+    let serverOptions = () => {
+        var socket = lsp.connect(30000, '127.0.0.1', function () {
+            console.log('Connected');
+        });
+        let result = {
+            writer: socket,
+            reader: socket,
+        };
+        return Promise.resolve(result);
     };
-    // Options to control the language client
     const clientOptions = {
-        // Register the server for all documents by default
-        documentSelector: [{ language: '*', scheme: 'file' }],
+        documentSelector: [docSelector],
         synchronize: {
-            // Notify the server about file changes to '.clientrc files contained in the workspace
             fileEvents: vscode_1.workspace.createFileSystemWatcher("**/.clientrc"),
         },
     };
-    // Create the language client and start the client.
-    client = new node_1.LanguageClient("markus", "polus", serverOptions, clientOptions);
-    // Start the client. This will also launch the server
-    client.start();
+    client = new node_1.LanguageClient("polus", serverOptions, clientOptions);
 }
 exports.activate = activate;
 function deactivate() {
@@ -40,5 +44,4 @@ function deactivate() {
     return client.stop();
 }
 exports.deactivate = deactivate;
-require("./tokenization");
 //# sourceMappingURL=extension.js.map
