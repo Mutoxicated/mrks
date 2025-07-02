@@ -7,6 +7,7 @@ use lexer::tokens::{Tokens, Token};
 use lexer::{Tokenize_S};
 
 use crate::lexer::tokens::RustToken;
+use crate::server::LSP;
 
 
 fn cstr_to_str(cstr:*mut i8) -> String {
@@ -45,9 +46,7 @@ fn main() {
     }
 
     println!("Test passed! Initiating tcp binding at {}...", ADDRESS!());
-    
-    let res = server::run();
-    if let Err(x) = res {
-        println!("Error! {x}");
-    }
+
+    let lsp = LSP::new();
+    lsp.run();
 }

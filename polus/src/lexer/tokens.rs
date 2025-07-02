@@ -37,10 +37,6 @@ pub struct RustToken {
     pub location: TokenLocation,
 }
 
-impl Token {
-
-}
-
 #[repr(C)]
 pub struct Tokens {
     pub array: *mut Token,

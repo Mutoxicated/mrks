@@ -60,14 +60,14 @@
             "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceRoot}/lsp/target/debug/lsp",
+            "program": "${workspaceRoot}/polus/target/debug/polus",
         },
         {
             "name": "Extension",
             "type": "extensionHost",
             "request": "launch",
             "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}/polus"
+                "--extensionDevelopmentPath=${workspaceFolder}/extensions/vsc"
             ]
         },
 		{

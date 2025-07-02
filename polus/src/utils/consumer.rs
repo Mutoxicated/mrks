@@ -1,8 +1,11 @@
 
 pub struct Consumer;
 impl Consumer {
-    pub fn take_until(string:&str, start:usize, condition:u8) -> String {
+    pub fn take_until(string:&str, start:usize, conditions:Vec<char>) -> String {
         let mut index = start;
+        let conditions:Vec<u8> = conditions.iter().map(|c| {
+            c.clone() as u8
+        }).collect();
         
         let strlen = string.len();
         let bytes = string.as_bytes();
@@ -13,7 +16,7 @@ impl Consumer {
         let mut c:u8;
         loop {
             c = bytes[index];
-            if c == condition {
+            if conditions.iter().any(|b| *b == c) {
                 break;
             }
             buf.push(c);
