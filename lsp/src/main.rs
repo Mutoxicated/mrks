@@ -1,5 +1,6 @@
 mod lexer;
 mod server;
+mod utils;
 
 use std::{ptr::null_mut};
 use lexer::tokens::{Tokens, Token};
@@ -43,7 +44,7 @@ fn main() {
         }
     }
 
-    println!("Test passed! Starting udp connection at {}...", ADDRESS!());
+    println!("Test passed! Initiating tcp binding at {}...", ADDRESS!());
     
     let res = server::run();
     if let Err(x) = res {
