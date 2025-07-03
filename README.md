@@ -42,4 +42,4 @@ let method Rectangle.area() -> int be: // 'NonPascalCaseMethod' error!
 
 # Notice
 
-Markus is very early in development, currently only the lexer system is done. That being said, I am simultaneously working on other systems that are extensions of the language, like Polus (the lsp) and soon the Virtual Machine. This is so that we don't have to make compromises later down the line for a new system that has to be developed.
+Markus is very early in development, currently only the lexer system is done. That being said, I am simultaneously working on other systems that are extensions of the language, like Polus (the lsp) and soon the Virtual Machine. This is so that not as many compromises will be made later down the line for a new system that has to be developed.
