@@ -2,6 +2,7 @@ mod lexer;
 mod server;
 mod utils;
 
+use std::net::TcpListener;
 use std::{ptr::null_mut};
 use lexer::tokens::{Tokens, Token};
 use lexer::{Tokenize_S};
@@ -46,7 +47,16 @@ fn main() {
     }
 
     println!("Test passed! Initiating tcp binding at {}...", ADDRESS!());
-
-    let lsp = LSP::new();
-    lsp.run();
+    let socket = TcpListener::bind(ADDRESS!()).expect("Binding failed");
+    println!("Binding to {} successful!", ADDRESS!());
+    loop {
+        let mut lsp = LSP::connect(&socket);
+        let res = lsp.run();
+        if let Err(x) = res {
+            if !x {
+                println!("Shutting down server...");
+                break;
+            }
+        }
+    }
 }

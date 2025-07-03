@@ -21,7 +21,7 @@ pub struct ResponseError {
 }
 
 pub struct LSPError {
-    kind: LSPErrorKind,
+    pub kind: LSPErrorKind,
     context: String,
 }
 
@@ -43,22 +43,44 @@ impl LSPError {
         Err(LSPError::new(kind, context))
     }
 
-    pub fn into_response_err(&self, code:i32) -> ResponseError {
+    pub fn into_response_err(&self) -> ResponseError {
         ResponseError {
-            code,
+            code: self.kind.get_code(),
             msg: format!("{}. Context: {}", self.kind.to_string(), self.context)
         }
     }
 }
 
+#[derive(PartialEq, Eq)]
 pub enum LSPErrorKind {
     StreamHandlingFailed,
+    InvalidContentHeader,
+    InvalidContent,
+    UnknownContent,
+    StreamWasClosed,
+    UnknownRequestMethod
 }
 
 impl LSPErrorKind {
     pub fn to_string(&self) -> String {
         match self {
-            Self::StreamHandlingFailed => "Failed to handle stream data".to_owned()
+            Self::StreamHandlingFailed => "Failed to handle stream data".to_owned(),
+            Self::InvalidContentHeader => "The content header of the stream was invalid".to_owned(),
+            Self::InvalidContent => "The content of the stream could not be parsed into a json value".to_owned(),
+            Self::UnknownContent => "The content of the stream was exotic".to_owned(),
+            Self::StreamWasClosed => "The tcp stream was closed".to_owned(),
+            Self::UnknownRequestMethod => "The given method of the request was exotic".to_owned()
+        }
+    }
+
+    pub fn get_code(&self) -> i32 {
+        match self {
+            Self::StreamHandlingFailed => INTERNAL_ERROR,
+            Self::InvalidContentHeader => PARSE_ERROR,
+            Self::InvalidContent => PARSE_ERROR,
+            Self::UnknownContent => PARSE_ERROR,
+            Self::StreamWasClosed => INTERNAL_ERROR,
+            Self::UnknownRequestMethod => INVALID_REQUEST
         }
     }
 }
