@@ -1,5 +1,5 @@
 use serde::{Deserialize, Deserializer};
-use crate::server::capabilities::*;
+use crate::server::client_capabilities::*;
 use crate::server::types::*;
 
 fn deser_msg_string<'de, D: Deserializer<'de>>(deserializer: D) -> Result<String, D::Error> {
@@ -17,25 +17,23 @@ pub struct FileOperations {
     #[serde(default)]
     #[serde(rename = "dynamicRegistration")]
     dynamic_registration: bool,
-    
-
 }
 
 #[derive(Deserialize)]
 pub struct InitializeParams {
-    proccess_id: Option<i32>,
-    client_info: Option<ClientInfo>,
+    pub proccess_id: Option<i32>,
+    pub client_info: Option<ClientInfo>,
     #[serde(deserialize_with = "deser_msg_string")]
-    locale: String,
+    pub locale: String,
     
     #[serde(deserialize_with = "deser_msg_string")]
-    root_path: String,
+    pub root_path: String,
     #[serde(rename = "rootUri")]
     #[serde(deserialize_with = "deser_msg_string")]
-    root_uri: DocumentUri,
+    pub root_uri: DocumentUri,
     #[serde(rename = "initializationOptions")]
-    initialization_options: serde_json::Value,
-    capabilities:  ClientCapabilities,
+    pub initialization_options: serde_json::Value,
+    pub capabilities:  ClientCapabilities,
 }
 
 #[derive(Deserialize)]
@@ -61,11 +59,91 @@ pub struct Workspace {
     code_lens: CodeLensWorkspaceClientCapabilities,
     file_operations: FileOperations,
     #[serde(rename = "textDocument")]
-    text_document: TextDocumentCapabilities
+    pub text_document: TextDocumentCapabilities
 
 }
 
 #[derive(Deserialize)]
 pub struct ClientCapabilities {
-    workspace: Workspace
+    pub workspace: Workspace
+}
+
+#[derive(Deserialize)]
+pub struct TextDocumentItem {
+    pub uri: DocumentUri,
+    #[serde(rename = "languageId")]
+    pub language_id: String,
+    pub version: i32,
+    pub text: String
+}
+
+#[derive(Deserialize)]
+pub struct DidOpenTextDocumentParams {
+    #[serde(rename = "textDocument")]
+    pub text_document: TextDocumentItem
+}
+
+#[derive(Deserialize)]
+pub struct VersionedDocumentIdentifier {
+    version: i32
+}
+
+#[derive(Deserialize)]
+pub struct Position {
+    line: usize,
+    character:usize
+}
+
+#[derive(Deserialize)]
+pub struct Range {
+    /// zero based
+    start: Position,
+    /// zero based
+    end: Position
+}
+
+#[derive(Deserialize)]
+pub struct TextDocumentChange {
+    range: Option<Range>,
+    text: String
+}
+
+#[derive(Deserialize)]
+pub struct DidChangeTextDocumentParams {
+    #[serde(rename = "textDocument")]
+    versioned_doc_ident: VersionedDocumentIdentifier,
+    content_changes: Vec<TextDocumentChange>
+}
+
+#[derive(Deserialize)]
+pub struct DidCloseTextDocumentParams {
+    #[serde(rename = "textDocument")]
+    pub text_document: TextDocumentItem
+}
+
+pub type ProgressToken = String;
+
+#[derive(Deserialize)]
+pub struct WorkDoneProgressParams {
+    #[serde(rename = "workDoneToken")]
+    work_done_token: Option<ProgressToken>,
+    #[serde(rename = "partialResultToken")]
+    partial_result_token: Option<ProgressToken>,
+    #[serde(rename = "textDocument")]
+    text_document: DocumentUri,
+}
+
+#[derive(Deserialize)]
+pub struct TextDocumentIdentifier {
+    pub uri: DocumentUri
+}
+
+#[derive(Deserialize)]
+pub struct SemanticTokensParams {
+    #[serde(rename = "workDoneToken")]
+    pub work_done_token: Option<ProgressToken>,
+    #[serde(rename = "partialResultToken")]
+    pub partial_result_token: Option<ProgressToken>,
+    #[serde(rename = "textDocument")]
+    pub text_document: TextDocumentIdentifier
 }

@@ -20,6 +20,7 @@ pub struct ResponseError {
     msg: String
 }
 
+#[derive(Clone)]
 pub struct LSPError {
     pub kind: LSPErrorKind,
     context: String,
@@ -51,14 +52,15 @@ impl LSPError {
     }
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone, Copy)]
 pub enum LSPErrorKind {
     StreamHandlingFailed,
     InvalidContentHeader,
     InvalidContent,
     UnknownContent,
     StreamWasClosed,
-    UnknownRequestMethod
+    UnknownRequestMethod,
+    UnknownNotificationMethod
 }
 
 impl LSPErrorKind {
@@ -69,7 +71,8 @@ impl LSPErrorKind {
             Self::InvalidContent => "The content of the stream could not be parsed into a json value".to_owned(),
             Self::UnknownContent => "The content of the stream was exotic".to_owned(),
             Self::StreamWasClosed => "The tcp stream was closed".to_owned(),
-            Self::UnknownRequestMethod => "The given method of the request was exotic".to_owned()
+            Self::UnknownRequestMethod => "The given request method was exotic".to_owned(),
+            Self::UnknownNotificationMethod => "The given notification method was exotic".to_owned()
         }
     }
 
@@ -80,7 +83,8 @@ impl LSPErrorKind {
             Self::InvalidContent => PARSE_ERROR,
             Self::UnknownContent => PARSE_ERROR,
             Self::StreamWasClosed => INTERNAL_ERROR,
-            Self::UnknownRequestMethod => INVALID_REQUEST
+            Self::UnknownRequestMethod => INVALID_REQUEST,
+            Self::UnknownNotificationMethod => METHOD_NOT_FOUND
         }
     }
 }

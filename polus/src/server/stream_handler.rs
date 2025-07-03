@@ -34,11 +34,13 @@ pub struct ContentType {
     charset: Charset
 }
 
+pub type StreamResult = Result<String, LSPError>;
+
 pub struct StreamHandler {
     stream: TcpStream,
-    pub data:String,
     content_length:Option<usize>,
     content_type: Option<ContentType>,
+    pub results: Vec<StreamResult>
 }
 
 macro_rules! MESSAGE_CAP {
@@ -51,14 +53,14 @@ impl StreamHandler {
     pub fn new(stream: TcpStream) -> Self {
         StreamHandler { 
             stream,
-            data: String::new(),
             content_length: None,
             content_type: None,
+            results: Vec::new()
         }
     }
 
-    fn handle_content_header(&mut self) -> Result<(), LSPError>{
-        let mut num_string = Consumer::take_until(self.data.as_str(), 15, ['\n'].to_vec());
+    fn handle_content_header(&mut self, data:&str) -> Result<(), LSPError>{
+        let mut num_string = Consumer::default().take_until(data, 15, ['\n'].to_vec());
         num_string = num_string.trim().to_owned();
         
         let num:Result<usize, ParseIntError> = num_string.parse();
@@ -67,7 +69,7 @@ impl StreamHandler {
         }
         self.content_length = Some(num.unwrap());
 
-        let length = self.data.len();
+        let length = data.len();
         let after_content_length = 20+num_string.len();
         if length <= after_content_length {
             self.content_type = Some(ContentType {
@@ -76,12 +78,12 @@ impl StreamHandler {
             });
             return Ok(())
         }
-        let content_type_data= &self.data[after_content_length..length];
+        let content_type_data= &data[after_content_length..length];
         if !content_type_data.contains("Content-Type") {
-            return LSPError::err(LSPErrorKind::InvalidContentHeader, format!("The content: '{}'. Parsed through '{}'. Content type data was invalid.", self.data, content_type_data));
+            return LSPError::err(LSPErrorKind::InvalidContentHeader, format!("The content: '{}'. Parsed through '{}'. Content type data was invalid.", data, content_type_data));
         }
-        let kind = Consumer::take_until_exclude(content_type_data, 13, [';'].to_vec());
-        let charset = Consumer::take_until_exclude(content_type_data , 13+kind.len(), ['\r'].to_vec());
+        let kind = Consumer::default().take_until_exclude(content_type_data, 13, [';'].to_vec());
+        let charset = Consumer::default().take_until_exclude(content_type_data , 13+kind.len(), ['\r'].to_vec());
         
         let kind = kind.trim();// "Content-Length: 5918\r\n\r\n!"
         let charset = charset.trim();
@@ -96,7 +98,7 @@ impl StreamHandler {
     }
     
     /// the `bool` in `Result` tells the lsp whether it has received content that should be processed by it
-    pub fn handle_incoming_stream(&mut self) -> Result<bool, LSPError> {
+    pub fn handle_incoming_stream(&mut self) {
         let mut received: Vec<u8> = vec![];
         let mut rx_bytes: Vec<u8> = Vec::new();
         if self.content_length.is_some() {
@@ -107,38 +109,46 @@ impl StreamHandler {
         
         let res = self.stream.read(&mut rx_bytes);
         if let Err(x) = res {
-            return LSPError::err(LSPErrorKind::StreamHandlingFailed, x.to_string())
+            self.results.push(LSPError::err(LSPErrorKind::StreamHandlingFailed, x.to_string()));
+            return
         }
         let bytes_read = res.unwrap();
         if bytes_read == 0 {
-            return LSPError::err(LSPErrorKind::StreamWasClosed, String::new());
+            self.results.push(LSPError::err(LSPErrorKind::StreamWasClosed, String::new()));
+            return
         }
         received.extend_from_slice(&rx_bytes[..bytes_read]);
         
-        self.data = String::from_utf8_lossy(&received).into_owned();
-        if self.data.is_empty() {
-            return Ok(false);
+        let data = String::from_utf8_lossy(&received).into_owned();
+        if data.is_empty() {
+            self.content_length = None;
+            self.results.push(Ok(String::new()));
+            return
         }
-        if self.data.contains("Content-Length:") {
-            self.handle_content_header()?;
-            //println!("Got {}", self.data);
-            return Ok(false);
+        if data.contains("Content-Length:") {
+            println!("Got {}", data);
+            let res = self.handle_content_header(data.as_str());
+            if let Err(x) = res {
+                self.results.push(Err(x));
+                return
+            }
+            self.results.push(Ok(String::new()));
+            return
         }
         self.content_length = None;
 
-        //println!("Got {}", self.data);
-        Ok(true)
+        println!("Got {}", data);
+        self.results.push(Ok(data.to_owned()));
     }
     
     pub fn err_to_stream(&mut self, response_err:ResponseError) {
         let string = serde_json::to_string(&response_err).unwrap();
-        println!("[Err] Send {}", string.len());
+        println!("[Err] Send {}", string);
         let _ = self.stream.write_all(format!("[Err] Send {}", string.len()).as_bytes());
         let _ = self.stream.write_all(string.as_bytes());
     }
 
     pub fn res_to_stream(&mut self, result: serde_json::Value, id:i32) {
-
         let response = ResponseMessage {
             jsonrpc: String::from("2.0"),
             id,
