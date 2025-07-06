@@ -3,7 +3,7 @@ mod server;
 mod utils;
 
 use std::net::TcpListener;
-use crate::server::LSP;
+use crate::{lexer::markus_tokenize, server::LSP};
 
 
 fn cstr_to_str(cstr:*mut i8) -> String {
@@ -21,6 +21,21 @@ fn cstr_to_str(cstr:*mut i8) -> String {
 }
 
 fn main() {
+    let tokens = markus_tokenize(std::fs::read_to_string("./test.k").unwrap().as_str());
+    for i in 0..tokens.len() {
+        let x = tokens[i];
+        let prev = if i == 0 { None } else { Some(tokens[i-1]) };
+        let data = x.IntoTokenData(prev);
+        println!("Token: {:?} at {}-{}:{} (relative: dl: {}, ds: {}, l: {})", 
+            x.r#type, 
+            x.location.column_range.min, 
+            x.location.column_range.max,
+            x.location.line,
+            data[0],
+            data[1],
+            data[2]
+        );
+    };
     println!("Test passed! Initiating tcp binding at {}...", ADDRESS!());
     let socket = TcpListener::bind(ADDRESS!()).expect("Binding failed");
     println!("Binding to {} successful!", ADDRESS!());

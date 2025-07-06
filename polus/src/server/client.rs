@@ -85,40 +85,42 @@ pub struct DidOpenTextDocumentParams {
 
 #[derive(Deserialize)]
 pub struct VersionedDocumentIdentifier {
-    version: i32
+    pub version: i32,
+    pub uri:DocumentUri
 }
 
 #[derive(Deserialize)]
 pub struct Position {
-    line: usize,
-    character:usize
+    pub line: usize,
+    pub character:usize
 }
 
 #[derive(Deserialize)]
 pub struct Range {
     /// zero based
-    start: Position,
+    pub start: Position,
     /// zero based
-    end: Position
+    pub end: Position
 }
 
 #[derive(Deserialize)]
 pub struct TextDocumentChange {
-    range: Option<Range>,
-    text: String
+    pub range: Option<Range>,
+    pub text: String
 }
 
 #[derive(Deserialize)]
 pub struct DidChangeTextDocumentParams {
     #[serde(rename = "textDocument")]
-    versioned_doc_ident: VersionedDocumentIdentifier,
-    content_changes: Vec<TextDocumentChange>
+    pub versioned_doc_ident: VersionedDocumentIdentifier,
+    #[serde(rename = "contentChanges")]
+    pub content_changes: Vec<TextDocumentChange>
 }
 
 #[derive(Deserialize)]
 pub struct DidCloseTextDocumentParams {
     #[serde(rename = "textDocument")]
-    pub text_document: TextDocumentItem
+    pub text_document: TextDocumentIdentifier
 }
 
 pub type ProgressToken = String;

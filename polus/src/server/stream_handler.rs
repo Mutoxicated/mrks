@@ -45,7 +45,7 @@ pub struct StreamHandler {
 
 macro_rules! MESSAGE_CAP {
     () => {
-        200
+        60
     };
 }
 
@@ -80,20 +80,17 @@ impl StreamHandler {
         received.extend_from_slice(&rx_bytes[..bytes_read]);
         
         let data = String::from_utf8_lossy(&received).into_owned();
-        if data.is_empty() {
-            self.content_length = None;
-            return Ok(String::new());
-        }
         if self.content_length.is_some() {
-            self.data.push_str(data.as_str());
             self.content_length = None;
+
+            self.data.push_str(data.as_str());
             let str = self.data.clone();
             self.data.clear();
             return Ok(str);
         }
 
         let content_length = Consumer::default().take_until(data.as_str(), 0, ['\n'].to_vec());
-        let num = Consumer::new(-1).take_until_exclude(&content_length, content_length.len()-1, [' '].to_vec());
+        let num = Consumer::new(-1).take_until_exclude(&content_length, content_length.len()-3, [' '].to_vec());
         let parsed_num:usize = num.parse().unwrap();
 
         let content_type = Consumer::default().take_until(data.as_str(), content_length.len(), ['\n'].to_vec());
@@ -106,10 +103,9 @@ impl StreamHandler {
         }
         self.data = data[content_header_length..data_length].to_string();
         self.content_length = Some(parsed_num-self.data.len());
-        println!("Got {}", data);
         Ok(String::new())
     }
-    
+
     pub fn err_to_stream(&mut self, response_err:ResponseError) {
         let string = serde_json::to_string(&response_err).unwrap();
         println!("[Err] Send {}", string);
@@ -133,4 +129,3 @@ impl StreamHandler {
         let _ = self.stream.write_all(response_json.as_bytes());
     }
 }
-

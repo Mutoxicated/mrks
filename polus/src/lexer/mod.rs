@@ -1,6 +1,6 @@
 use std::ptr::null_mut;
 
-use crate::lexer::tokens::{RustToken, Tokens};
+use crate::lexer::tokens::{RustToken, Token, Tokens};
 
 pub mod tokens;
 
@@ -20,7 +20,7 @@ pub fn markus_tokenize(file: &str) -> Vec<RustToken> {
     }
 
     let mut tokens: Tokens = Tokens {
-        array: null_mut(),
+        array: null_mut() as *mut Token,
         length: 0,
     };
     unsafe {
@@ -29,7 +29,7 @@ pub fn markus_tokenize(file: &str) -> Vec<RustToken> {
         let mut rust_tokens = Vec::new();
         rust_tokens.reserve_exact(tokens.length as usize);
         for i in 0..tokens.length {
-            rust_tokens.push(tokens.array.offset(i as isize).as_ref().unwrap().into_rust());
+            rust_tokens.push((tokens.array.offset(i as isize) as *const Token).as_ref().unwrap().into_rust());
         }
 
         return rust_tokens;

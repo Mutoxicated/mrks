@@ -43,7 +43,9 @@ impl Consumer {
                 break;
             }
         }
-        
+        if self.step < 0 {
+            buf.reverse();
+        }
         String::from_utf8(buf).unwrap()
     }
 
@@ -72,7 +74,9 @@ impl Consumer {
                 break;
             }
         }
-        
+        if self.step < 0 {
+            buf.reverse();
+        }
         String::from_utf8(buf).unwrap()
     }
 }

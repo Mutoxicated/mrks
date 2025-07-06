@@ -67,10 +67,15 @@ impl RustToken {
             return data
         }
         let relative_to = relative_to.unwrap();
+        let start_char = if self.location.line == relative_to.location.line { 
+            (self.location.column_range.min-relative_to.location.column_range.max).unsigned_abs() as usize 
+        } else {
+            self.location.column_range.min as usize
+        };
         data.extend_from_slice(&[
             (self.location.line-relative_to.location.line) as usize, 
-            (self.location.column_range.min-relative_to.location.column_range.min) as usize, 
-            (self.location.column_range.max-self.location.column_range.min) as usize, 
+            start_char, 
+            (self.location.column_range.max-self.location.column_range.min).unsigned_abs() as usize, 
             legend.0 as usize,
             legend.1 as usize
         ]);
