@@ -11,18 +11,27 @@ TARGET=/usr/local
 DLLSRC= ./src/lexer/lexer.c ./src/lexer/tokens.c ./src/helpers/helpers.c ./src/helpers/strbuf.c ./src/mem_dbg/mem_dbg.c 
 DLLOBJ= $(DLLSRC:%.c=%.o)
 THEDLL= /usr/lib/liblexer.so
+WINDLL= C:/ProgramData/
 
 macro: debug
 	./utils/utils.exe verbose
+
+windll: $(DLLOBJ)
+windll: WINDLL
+.NOTPARALLEL: windll
 
 dll: $(DLLOBJ) 
 dll: DLL
 .NOTPARALLEL: dll
 
+WINDLL: $(WINDLL)
 DLL: $(THEDLL)
 
 $(THEDLL): $(DLLOBJ)
 	$(CC) -shared -o $(THEDLL) $^ -I ./include
+
+$(WINDLL): $(DLLOBJ)
+	$(CC) -shared -o $(WINDLL) $^ -I ./include
 
 debug: CFLAGS += -g
 debug: $(EXE)

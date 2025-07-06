@@ -7,8 +7,6 @@
 #include "color.h"
 #include "dbg_options.h"
 #include "strbuf.h"
-
-#include "node/node_api.h"
 #include "tokens.h"
 
 #define bool int

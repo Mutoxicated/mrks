@@ -37,90 +37,58 @@ impl LSP {
         let stream = socket.accept().expect("Failed to establish connection.");
         println!("Accepted connection from {}", stream.1);
         
-        let stream_handler = StreamHandler::new(stream.0);
-        let stream_handler = Arc::new((Mutex::new(stream_handler), Condvar::new()));
+        let mut stream_handler = StreamHandler::new(stream.0);
 
-        thread::scope(|scope| {
-            let stream_thread = scope.spawn(|| {
-                loop {
-                    let (stream_handler, cvar) = &*stream_handler;
-                    let mut stream_handler = stream_handler.lock().unwrap();
-                    stream_handler.handle_incoming_stream();
-                    if let Err(x) = &stream_handler.results[stream_handler.results.len()-1] && x.kind == LSPErrorKind::StreamWasClosed {
-                        break;
-                    }
-                    cvar.notify_one();
-                    stream_handler = cvar.wait(stream_handler).unwrap();
-                }
-            });
-            let a = scope.spawn(|| {
-                loop {
-                    let (stream_handler, cvar) = &*stream_handler;
-                    let mut stream_handler = stream_handler.lock().unwrap();
-
-                    if stream_handler.results.len() == 0 {
-                        cvar.notify_one();
-                        continue;
-                    }
-                    let res = stream_handler.results.remove(0);
-                    if let Err(x) = res {
-                        if x.kind == LSPErrorKind::StreamWasClosed {
-                            return Err(true);
-                        }
-                        println!("{x}");
-                        stream_handler.err_to_stream(x.into_response_err());
-                        cvar.notify_one();
-                        continue;
-                    }
-                    let content = res.ok().unwrap(); 
-                    if content.is_empty() {
-                        cvar.notify_one();
-                        continue;
-                    }
-
-                    let res = ContentInterpreter::action(content.as_str());
-                    if let Err(x) = res {
-                        println!("{x}");
-                        stream_handler.err_to_stream(x.into_response_err());
-                        cvar.notify_one();
-                        continue;
-                    }
-                    let msg = res.ok().unwrap();
-                    let res = self.handle_message(&mut stream_handler, &msg);
-                    if let Err(x) = res {
-                        if x.kind == LSPErrorKind::StreamWasClosed {
-                            cvar.notify_one();
-                            return Err(false)
-                        }
-                        println!("{x}");
-                        stream_handler.err_to_stream(x.into_response_err());
-                    }
-                    cvar.notify_one();
-                    stream_handler = cvar.wait(stream_handler).unwrap();
-                    
-                    /* The main loop
-                    
-                    // handle stream input (StreamHandler) --- DONE ---
-                    //-> handles basic input like 'Content-Length' and 'Content-Type'
-                    
-                    // interpret bigger stream input -> output stuff understandable to lsp (ContentInterpreter)
-                    //-> handles actual request/response/notification jsonrpc messages
-                    //-> outputs information that the lsp can utilize to convert jsonrpc messages to their struct counterpart
-                    
-                    // lsp logic (LSPCore)
-                    
-                    */
-                }
-            });
-            loop {
-                if a.is_finished() || stream_thread.is_finished() {
-                    return a.join().unwrap();
-                }
+        loop {
+            let res = stream_handler.handle_incoming_stream();
+            if let Err(x) = &res && x.kind == LSPErrorKind::StreamWasClosed {
+                return Err(true);
             }
-        })
+            if let Err(x) = res {
+                if x.kind == LSPErrorKind::StreamWasClosed {
+                    return Err(true);
+                }
+                println!("{x}");
+                stream_handler.err_to_stream(x.into_response_err());
+                continue;
+            }
+            let data = res.ok().unwrap();
+            if data.is_empty() {
+                continue;
+            }
+
+            let res = ContentInterpreter::action(data.as_str());
+            if let Err(x) = res {
+                println!("{x}");
+                stream_handler.err_to_stream(x.into_response_err());
+                continue;
+            }
+            let msg = res.ok().unwrap();
+            let res = self.handle_message(&mut stream_handler, &msg);
+            if let Err(x) = res {
+                if x.kind == LSPErrorKind::StreamWasClosed {
+                    return Err(false)
+                }
+                println!("{x}");
+                stream_handler.err_to_stream(x.into_response_err());
+            }
+            
+            /* The main loop
+            
+            // handle stream input (StreamHandler) --- DONE ---
+            //-> handles basic input like 'Content-Length' and 'Content-Type'
+            
+            // interpret bigger stream input -> output stuff understandable to lsp (ContentInterpreter)
+            //-> handles actual request/response/notification jsonrpc messages
+            //-> outputs information that the lsp can utilize to convert jsonrpc messages to their struct counterpart
+            
+            // lsp logic (LSPCore)
+            
+            */
+        }
     }
 
-    pub fn handle_message(&mut self, stream_handler:&mut MutexGuard<'_, StreamHandler>, msg:&Message) -> Result<(), LSPError> {
+    pub fn handle_message(&mut self, stream_handler:&mut StreamHandler, msg:&Message) -> Result<(), LSPError> {
         match msg {
             msg::Message::Request(x) => {
                 println!("Got request: {}", x.method);
@@ -141,7 +109,7 @@ impl LSP {
         Consumer::new(-1).take_until_exclude(uri, uri.len()-1, vec!['.'])
     }
 
-    pub fn handle_request(&mut self, stream_handler:&mut MutexGuard<'_, StreamHandler>, req: &RequestMessage) -> Result<(), LSPError> {
+    pub fn handle_request(&mut self, stream_handler:&mut StreamHandler, req: &RequestMessage) -> Result<(), LSPError> {
         match req.method.as_str() {
             "initialize" => {
                 let legend = SemanticTokensLegend {
