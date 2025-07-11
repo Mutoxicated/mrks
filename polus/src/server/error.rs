@@ -1,18 +1,16 @@
-use std::fmt::Write;
-
 use serde::{Deserialize, Serialize};
 
-pub static PARSE_ERROR:i32 = -32700;
-pub static INVALID_REQUEST:i32 = -32600;
-pub static METHOD_NOT_FOUND:i32 = -32601;
-pub static INVALID_PARAMS:i32 = -32602;
-pub static INTERNAL_ERROR:i32 = -32603;
+#[macro_export] macro_rules! PARSE_ERROR { () => { -32700 } }
+#[macro_export] macro_rules! INVALID_REQUEST { () => { -32600 } }
+#[macro_export] macro_rules! METHOD_NOT_FOUND { () => { -32601 } }
+#[macro_export] macro_rules! INVALID_PARAMS { () => { -32602 } }
+#[macro_export] macro_rules! INTERNAL_ERROR { () => { -32603 } }
 
-pub static SERVER_NOT_INITIALIZED:i32 = -32002;
+#[macro_export] macro_rules! SERVER_NOT_INITIALIZED { () => { -32002 } }
 
-pub static REQUEST_FAILED:i32 = -32803;
-pub static CONTENT_MODIFIED:i32 = -32801;
-pub static REQUEST_CANCELLED:i32 = -32800;
+#[macro_export] macro_rules! REQUEST_FAILED { () => { -32803 } }
+#[macro_export] macro_rules! CONTENT_MODIFIED { () => { -32801 } }
+#[macro_export] macro_rules! REQUEST_CANCELLED { () => { -32800 } }
 
 #[derive(Deserialize, Serialize)]
 pub struct ResponseError {
@@ -78,13 +76,13 @@ impl LSPErrorKind {
 
     pub fn get_code(&self) -> i32 {
         match self {
-            Self::StreamHandlingFailed => INTERNAL_ERROR,
-            Self::InvalidContentHeader => PARSE_ERROR,
-            Self::InvalidContent => PARSE_ERROR,
-            Self::UnknownContent => PARSE_ERROR,
-            Self::StreamWasClosed => INTERNAL_ERROR,
-            Self::UnknownRequestMethod => INVALID_REQUEST,
-            Self::UnknownNotificationMethod => METHOD_NOT_FOUND
+            Self::StreamHandlingFailed => INTERNAL_ERROR!(),
+            Self::InvalidContentHeader => PARSE_ERROR!(),
+            Self::InvalidContent => PARSE_ERROR!(),
+            Self::UnknownContent => PARSE_ERROR!(),
+            Self::StreamWasClosed => INTERNAL_ERROR!(),
+            Self::UnknownRequestMethod => INVALID_REQUEST!(),
+            Self::UnknownNotificationMethod => METHOD_NOT_FOUND!()
         }
     }
 }

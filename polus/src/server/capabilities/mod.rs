@@ -1,13 +1,16 @@
 use serde::Serialize;
 
 pub mod semantic_tokens;
+pub mod diagnostics;
 
 #[derive(Serialize)]
 pub struct ServerCapabilities {
     #[serde(rename = "semanticTokensProvider")]
     pub semantic_tokens_provider: SemanticTokensOptions,
     #[serde(rename = "textDocumentSync")]
-    pub text_document_sync: TextDocumentSyncOptions
+    pub text_document_sync: TextDocumentSyncOptions,
+    #[serde(rename = "diagnosticProvider")]
+    pub diagnostic_provider: DiagnosticOptions,
 }
 
 #[derive(Serialize)]
@@ -45,6 +48,15 @@ pub struct TextDocumentSyncOptions {
     #[serde(rename = "openClose")]
     pub open_close:bool,
     pub change:usize,
+}
+
+#[derive(Serialize)]
+pub struct DiagnosticOptions {
+    pub identifier: Option<String>,
+    #[serde(rename = "interFileDependencies")]
+    pub inter_file_deps: bool,
+    #[serde(rename = "workspaceDiagnostics")]
+    pub workspace_diagnostics: bool,
 }
 
 #[derive(Serialize)]

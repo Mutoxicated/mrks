@@ -60,7 +60,6 @@ void tokens_add(Tokens* arr, Token token) {
     if (arr->array == NULL) { 
         arr->array = (Token*)malloc(sizeof(Token)); 
         arr->array[0] = token;
- 
         return; 
     } 
     arr->array = (Token*)realloc(arr->array, sizeof(Token)*arr->length); 

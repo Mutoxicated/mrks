@@ -1,11 +1,10 @@
-use std::{net::TcpListener, sync::{Arc, Condvar, Mutex, MutexGuard}, thread, vec};
+use std::{net::TcpListener, vec};
 
-use crate::{lexer::markus_tokenize, server::{capabilities::{semantic_tokens::{TOKEN_MODIFIERS, TOKEN_TYPES}, SemanticTokens, SemanticTokensLegend, SemanticTokensOptions, ServerCapabilities, ServerInfo, TextDocumentSyncOptions}, client::{DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, SemanticTokensParams}, content_interpreter::ContentInterpreter, error::{LSPError, LSPErrorKind}, msg::{InitializeResult, Message, NotificationMessage, RequestMessage}, stream_handler::StreamHandler}, utils::consumer::Consumer, TEXT_DOC_SYNC_FULL};
+use crate::{lexer::markus_tokenize, server::{capabilities::{diagnostics::{self, Diagnostic, FullDocumentDiagnosticReport}, semantic_tokens::{TOKEN_MODIFIERS, TOKEN_TYPES}, DiagnosticOptions, SemanticTokens, SemanticTokensLegend, SemanticTokensOptions, ServerCapabilities, ServerInfo, TextDocumentSyncOptions}, client::{DidChangeTextDocumentParams, DidCloseTextDocumentParams, DidOpenTextDocumentParams, DocumentDiagnosticsParams, Position, Range, SemanticTokensParams}, content_interpreter::ContentInterpreter, error::{LSPError, LSPErrorKind}, msg::{InitializeResult, Message, NotificationMessage, RequestMessage}, stream_handler::StreamHandler}, utils::consumer::Consumer, DOC_DIAGNOSTIC_KIND_FULL, TEXT_DOC_SYNC_FULL};
 
 mod content_interpreter;
 mod error;
 mod msg;
-mod msg_handler;
 mod client_capabilities;
 mod client;
 mod types;
@@ -117,7 +116,12 @@ impl LSP {
                 };
                 let server_capabilities = ServerCapabilities {
                     semantic_tokens_provider: semantic_tokens_options,
-                    text_document_sync: text_document_sync_options
+                    text_document_sync: text_document_sync_options,
+                    diagnostic_provider: DiagnosticOptions {
+                        identifier: None,
+                        inter_file_deps: false,
+                        workspace_diagnostics: false
+                    }
                 };
                 let initialize_result = InitializeResult {
                     capabilities: server_capabilities,
@@ -161,7 +165,32 @@ impl LSP {
                 }
                 stream_handler.res_to_stream(serde_json::to_value(semantic_tokens).unwrap(), req.id);
                 Ok(())
-            }
+            },
+            "textDocument/diagnostic" => {
+                let params: DocumentDiagnosticsParams = serde_json::from_value(req.params.clone().unwrap()).unwrap();
+
+                let mut diagnostics = FullDocumentDiagnosticReport {
+                    kind: DOC_DIAGNOSTIC_KIND_FULL!(),
+                    result_id: None,
+                    items: Vec::new()
+                };
+
+                if LSP::get_extension(params.text_document.uri.as_str()).as_str() != "k" {
+                    stream_handler.res_to_stream(serde_json::to_value(diagnostics).unwrap(), req.id);
+                    return Ok(())
+                }
+
+                let content = self.text_documents_content[self.text_documents_uri.iter().position(|x| *x == params.text_document.uri).unwrap()].as_str();
+                if content.len() > 0 {
+                    diagnostics.items.push(Diagnostic::warning(Range{
+                        start: Position { line: 1, character: 0 },
+                        end: Position { line: 1, character: content.len()-1 },
+                    }, String::from("bing")
+                    ));
+                }
+                stream_handler.res_to_stream(serde_json::to_value(diagnostics).unwrap(), req.id);
+                Ok(())
+            },
             "shutdown" => LSPError::err(LSPErrorKind::StreamWasClosed, String::new()),
             _ => LSPError::err(LSPErrorKind::UnknownRequestMethod, format!("The method name: {}", req.method))
         }

@@ -9,10 +9,6 @@
 #include "strbuf.h"
 #include "tokens.h"
 
-#define bool int
-#define false 0
-#define true 1
-
 void Tokenize(char* src, Tokens* tokens) { 
     int line = 1;
     int columnEnd = 0;

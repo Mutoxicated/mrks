@@ -1,9 +1,10 @@
+use serde::Serialize;
 use serde::{Deserialize, Deserializer};
 use crate::server::client_capabilities::*;
 use crate::server::types::*;
 
 fn deser_msg_string<'de, D: Deserializer<'de>>(deserializer: D) -> Result<String, D::Error> {
-    Option::deserialize(deserializer).map(|s| s.unwrap_or_else(|| "(missing".to_owned()))
+    Option::deserialize(deserializer).map(|s| s.unwrap_or_else(|| "(missing)".to_owned()))
 }
 
 #[derive(Deserialize)]
@@ -89,13 +90,13 @@ pub struct VersionedDocumentIdentifier {
     pub uri:DocumentUri
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct Position {
     pub line: usize,
     pub character:usize
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct Range {
     /// zero based
     pub start: Position,
@@ -148,4 +149,13 @@ pub struct SemanticTokensParams {
     pub partial_result_token: Option<ProgressToken>,
     #[serde(rename = "textDocument")]
     pub text_document: TextDocumentIdentifier
+}
+
+#[derive(Deserialize)]
+pub struct DocumentDiagnosticsParams {
+    #[serde(rename = "textDocument")]
+    pub text_document: TextDocumentIdentifier,
+    pub identifier: Option<String>,
+    #[serde(rename = "previousResultId")]
+    pub previous_result_id: Option<String>,
 }
