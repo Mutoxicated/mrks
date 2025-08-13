@@ -1,0 +1,5 @@
+
+#[magic]
+pub enum A {
+
+}

@@ -7,13 +7,12 @@ pub enum TokenType {
 }
 
 impl TokenType {
-    pub fn into_legend(&self) -> (TokenTypeLegend, TokenModifierLegend) {
+    pub fn into_legend(&self) -> (TokenTypeLegend, u8) {
         use TokenTypeLegend::*;
-        use TokenModifierLegend::*;
         match *self {
-            Self::Rubric => (Keyword, Class),
-            Self::Identifier => (Variable, Class),
-            _ => (Variable, Class)
+            Self::Rubric => (Keyword, 1),
+            Self::Identifier => (Variable, 1),
+            _ => (Variable, 1)
         }
     }
 }
@@ -58,7 +57,7 @@ impl RustToken {
         let legend = self.r#type.into_legend();
         if relative_to.is_none() {
             data.extend_from_slice(&[
-                self.location.line as usize, 
+                1-self.location.line as usize, 
                 self.location.column_range.min as usize, 
                 (self.location.column_range.max-self.location.column_range.min) as usize, 
                 legend.0 as usize,
@@ -68,7 +67,7 @@ impl RustToken {
         }
         let relative_to = relative_to.unwrap();
         let start_char = if self.location.line == relative_to.location.line { 
-            (self.location.column_range.min-relative_to.location.column_range.max).unsigned_abs() as usize 
+            (self.location.column_range.min-relative_to.location.column_range.min).unsigned_abs() as usize
         } else {
             self.location.column_range.min as usize
         };

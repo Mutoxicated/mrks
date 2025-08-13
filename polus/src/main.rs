@@ -5,7 +5,6 @@ mod utils;
 use std::net::TcpListener;
 use crate::{lexer::markus_tokenize, server::LSP};
 
-
 fn cstr_to_str(cstr:*mut i8) -> String {
     let mut str = String::new();
     let mut i = 0;

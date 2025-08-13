@@ -25,9 +25,10 @@ void Tokenize(char* src, Tokens* tokens) {
     int len = strlen(src)-1;
     while (true) {
         index++;
+        columnEnd++;
         if (index > len) {
             if (strcmp(_ident_buf.array, "") != 0) {
-                Token token = token_new(Identifier, _ident_buf.array, columnEnd, line);
+                Token token = token_new(Identifier, _ident_buf.array, columnEnd-1, line);
                 TokenType tt = is_ident_keyword(token.lexeme);
                 if (tt != Invalid) {
                     token.type = tt;
@@ -35,13 +36,12 @@ void Tokenize(char* src, Tokens* tokens) {
                 tokens_add(tokens, token);
                 strbuf_reset(ident_buf);
             }else if (strcmp(_num_buf.array, "") != 0) {
-                tokens_add(tokens, token_new(Number, _num_buf.array, columnEnd, line));
+                tokens_add(tokens, token_new(Number, _num_buf.array, columnEnd-1, line));
                 strbuf_reset(num_buf);
             }
             break;
         }
         o = src[index];
-        columnEnd++;
 
         if (is_multiline_comment) {
             if (o == '\n') {
@@ -76,7 +76,7 @@ void Tokenize(char* src, Tokens* tokens) {
             }
             if (o == '\"') {
                 is_string = false;
-                tokens_add(tokens, token_new(Str, _ident_buf.array, columnEnd-1, line));
+                tokens_add(tokens, token_new(Str, _ident_buf.array, columnEnd-2, line));
                 strbuf_reset(ident_buf);
                 continue;
             }
@@ -89,7 +89,7 @@ void Tokenize(char* src, Tokens* tokens) {
             continue;
         }
         if (strcmp(_ident_buf.array, "") != 0) {
-            Token token = token_new(Identifier, _ident_buf.array, columnEnd, line);
+            Token token = token_new(Identifier, _ident_buf.array, columnEnd-1, line);
             TokenType tt = is_ident_keyword(token.lexeme);
             if (tt != Invalid) {
                 token.type = tt;
@@ -102,7 +102,7 @@ void Tokenize(char* src, Tokens* tokens) {
             continue;
         }
         if (strcmp(_num_buf.array, "") != 0) {
-            tokens_add(tokens, token_new(Number, _num_buf.array, columnEnd, line));
+            tokens_add(tokens, token_new(Number, _num_buf.array, columnEnd-1, line));
             strbuf_reset(num_buf);
         }
         switch (o) {
@@ -110,37 +110,37 @@ void Tokenize(char* src, Tokens* tokens) {
                 is_string = true;
                 break;
             case '=':
-                tokens_add(tokens, token_new(Equal, "=", columnEnd, line));
+                tokens_add(tokens, token_new(Equal, "=", columnEnd-1, line));
                 break;
             case ',':
-                tokens_add(tokens, token_new(Comma, ",", columnEnd, line));
+                tokens_add(tokens, token_new(Comma, ",", columnEnd-1, line));
                 break;
             case '(':
-                tokens_add(tokens, token_new(OpenParen, "(", columnEnd, line));
+                tokens_add(tokens, token_new(OpenParen, "(", columnEnd-1, line));
                 break;
             case ')':
-                tokens_add(tokens, token_new(OpenParen, ")", columnEnd, line));
+                tokens_add(tokens, token_new(OpenParen, ")", columnEnd-1, line));
                 break;
             case ':':
-                tokens_add(tokens, token_new(Colon, ":", columnEnd, line));
+                tokens_add(tokens, token_new(Colon, ":", columnEnd-1, line));
                 break;
             case '-':
-                tokens_add(tokens, token_new(Dash, "-", columnEnd, line));
+                tokens_add(tokens, token_new(Dash, "-", columnEnd-1, line));
                 break;
             case '>':
-                tokens_add(tokens, token_new(Greater, ">", columnEnd, line));
+                tokens_add(tokens, token_new(Greater, ">", columnEnd-1, line));
                 break;
             case '<':
-                tokens_add(tokens, token_new(Less, "<", columnEnd, line));
+                tokens_add(tokens, token_new(Less, "<", columnEnd-1, line));
                 break;
             case '^':
-                tokens_add(tokens, token_new(Caret, "^", columnEnd, line));
+                tokens_add(tokens, token_new(Caret, "^", columnEnd-1, line));
                 break;
             case '*':
-                tokens_add(tokens, token_new(Asterisk, "*", columnEnd, line));
+                tokens_add(tokens, token_new(Asterisk, "*", columnEnd-1, line));
                 break;
             case '+':
-                tokens_add(tokens, token_new(Dash, "+", columnEnd, line));
+                tokens_add(tokens, token_new(Dash, "+", columnEnd-1, line));
                 break;
             case '/':
                 if (index != len) {
@@ -154,18 +154,18 @@ void Tokenize(char* src, Tokens* tokens) {
                     }
                     index++;
                 }
-                tokens_add(tokens, token_new(Slash, "/", columnEnd, line));
+                tokens_add(tokens, token_new(Slash, "/", columnEnd-1, line));
                 break;
             case '$':
-                tokens_add(tokens, token_new(Dollar, "$", columnEnd, line));
+                tokens_add(tokens, token_new(Dollar, "$", columnEnd-1, line));
                 break;
             case '\n':
-                tokens_add(tokens, token_new(Newline, "(newline)", columnEnd, line));
+                tokens_add(tokens, token_new(Newline, "(newline)", columnEnd-1, line));
                 line++;
                 columnEnd = 0;
                 break;
             case '\t':
-                tokens_add(tokens, token_new(Identation, "(tab)", columnEnd, line));
+                tokens_add(tokens, token_new(Identation, "(tab)", columnEnd-1, line));
                 break;
 
         }
